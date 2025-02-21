@@ -1,13 +1,13 @@
+import { Provider } from './components/ui/provider';
+
+import {createBrowserRouter,RouterProvider,} from "react-router-dom";
+
 
 function App() {
-
   return (
-    <>
-    <div>
-    Hello from E commerce
-
-    </div>
-    </>
+    <Provider>
+      <div>hell</div>
+    </Provider>
   )
 }
 
