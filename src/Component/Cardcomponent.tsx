@@ -2,24 +2,50 @@ import { useState, useEffect } from 'react';
 import { Button, Card, Image, Text } from "@chakra-ui/react";
 import { Product } from '../interface/interface';
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query'
+import  ProductSkeleton  from './ProductSkeleton';
+import { Grid } from "@chakra-ui/react"
+
+
+
 
 export default function Cardcomponent() {
   const [Productlist, setProductlist] = useState<Product[]>([]);
   const ApiUrl = import.meta.env.VITE_SERVER_URL;
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await axios.get(`${ApiUrl}/api/products?populate=thumbnail&populate=categories`);
-        setProductlist(res.data.data);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      }
-    };
 
-    fetchProducts();
-  }, []);
+  
+  
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get(`${ApiUrl}/api/products?populate=thumbnail&populate=categories`);
+      setProductlist(res.data.data);
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+  
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['Products'],
+    queryFn: fetchProducts,
+  })
 
+  if (false) {
+    return(  
+
+      <Grid  margin={30}   templateColumns={"repeat(auto-fill,minmax(300px,1fr))"} gap={6}>
+         {  Array.from({length:20}).map((_,idx)=> 
+        <ProductSkeleton key={idx}/>)}
+    </Grid>
+    )}
+
+  
+
+  
+
+   
+  
+  
   return (
     <>
       {Productlist.length > 0 ? (
