@@ -1,17 +1,9 @@
-import { SkeletonCircle, SkeletonText } from "../components/ui/skeleton";
-import { Grid, HStack, Stack } from "@chakra-ui/react"
-import { Skeleton}from "@chakra-ui/react"
+import React from 'react'
 
-  const ProductSkeleton = ({ }) => {
+function ProductSkeleton() {
   return (
-      <>
-    
-      
-        <SkeletonCircle size="10" />
-        <SkeletonText noOfLines={2} />
-      <Skeleton height="200px" />
-   
-      </>
+    <div>ProductSkeleton</div>
   )
 }
-export default  ProductSkeleton;
+
+export default ProductSkeleton

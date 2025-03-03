@@ -1,4 +1,3 @@
-import { Provider } from './components/ui/provider';
 
 import {createBrowserRouter,RouterProvider,} from "react-router-dom";
 

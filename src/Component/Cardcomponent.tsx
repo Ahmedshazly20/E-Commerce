@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Button, Card, Image, Text } from "@chakra-ui/react";
+import { Button, Card, Flex, Image, Text } from "@chakra-ui/react";
 import { Product } from '../interface/interface';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query'
 import  ProductSkeleton  from './ProductSkeleton';
 import { Grid } from "@chakra-ui/react"
+import { txtclise ,titleclise } from './../utils/Functions';
 
 
 
@@ -30,13 +31,15 @@ export default function Cardcomponent() {
     queryFn: fetchProducts,
   })
 
-  if (false) {
+  if (isPending) {
     return(  
 
-      <Grid  margin={30}   templateColumns={"repeat(auto-fill,minmax(300px,1fr))"} gap={6}>
+      
+      <>
          {  Array.from({length:20}).map((_,idx)=> 
         <ProductSkeleton key={idx}/>)}
-    </Grid>
+    
+        </>
     )}
 
   
@@ -46,36 +49,37 @@ export default function Cardcomponent() {
    
   
   
-  return (
-    <>
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {Productlist.length > 0 ? (
-        Productlist.map((produc: Product) => (
-          <Card.Root key={produc.id} maxW="sm" overflow="hidden">
-            <Image
+        Productlist.map((produc: Product) =>  (<div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <div className="relative group">
+          <img
               src={produc?.thumbnail?.formats?.thumbnail?.url ? ApiUrl + produc.thumbnail.formats.thumbnail.url : 'placeholderImage.png'} 
-              alt={produc.title} 
-              objectFit="cover"
-              width="100%"
-              height="200px"
-            />
-            <Card.Body gap="2">
-              <Card.Title>{produc.title}</Card.Title>
-              <Card.Description>
-                {produc.description} {/* Use the actual product description */}
-              </Card.Description>
-              <Text textStyle="2xl" fontWeight="medium" letterSpacing="tight" mt="2">
-                ${produc.price} {/* Use the actual product price */}
-              </Text>
-            </Card.Body>
-            <Card.Footer gap="2">
-              <Button variant="solid">Buy now</Button>
-              <Button variant="ghost">Add to cart</Button>
-            </Card.Footer>
-          </Card.Root>
-        ))
-      ) : (
-        <div>There is no data</div>
-      )}
-    </>
-  );
-}
+             alt={produc.title}
+            className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        </div>
+        <div className="p-5">
+          <h3 className="font-semibold text-gray-900 text-lg mb-2">{produc.title}</h3>
+          <p className="text-sm text-gray-600 mb-4">{produc.description}</p>
+          <div className="flex items-center justify-between">
+            <span className="text-lg font-bold text-[#0284c7]">
+              ${produc.price.toFixed(2)}
+            </span>
+            <button
+            
+            className="flex items-center gap-2 bg-[#0ea5e9] text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors">              addToCart
+            </button>
+          </div>
+        </div>
+      </div>))):<div>there is server err </div>
+
+
+
+    }
+    </div>)}
+
+
+
