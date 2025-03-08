@@ -41,11 +41,6 @@ export default function Cardcomponent() {
     
         </>
     )}
-
-  
-
-  
-
    
   
   
@@ -75,7 +70,6 @@ export default function Cardcomponent() {
           </div>
         </div>
       </div>))):<div>there is server err </div>
-
 
 
     }
