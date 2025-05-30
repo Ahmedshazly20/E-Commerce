@@ -11,4 +11,9 @@ export const formFields = [
 
 
 
+  export const Login = [
+    { id: "identifier", label: "Email address", type: "email", placeholder: "john.doe@example.com", icon: Mail },
+    { id: "password", label: "Password", type: "password", placeholder: "Create a password", icon: Lock },
+  ];
+
 

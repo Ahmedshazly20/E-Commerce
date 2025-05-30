@@ -5,7 +5,7 @@ import { Product } from '../interface/interface';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query'
 import  ProductSkeleton  from './ProductSkeleton';
-import { discraptionclise ,titleclise } from './../utils/Functions';
+import { discraptionclise ,titleclise } from '../utils/Functions';
 
 
 

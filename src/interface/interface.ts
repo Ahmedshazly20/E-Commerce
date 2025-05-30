@@ -45,3 +45,8 @@ export interface FormData {
     password: string;
     confirmPassword: string;
   }
+
+  export interface LoginInterface{
+    identifier: string;
+    password: string;
+  }

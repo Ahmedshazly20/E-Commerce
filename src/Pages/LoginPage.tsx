@@ -1,19 +1,44 @@
-import  { useState } from 'react';
-import { Mail, Lock, ArrowRight } from 'lucide-react';
+
+import { useForm, SubmitHandler  } from "react-hook-form";
+import { useDispatch,useSelector } from "react-redux";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import {  ArrowRight ,Loader,LoaderCircle } from 'lucide-react';
+import { LoginInterface } from "../interface/interface";
+import { Login} from "../data/data";
+import { userLogin ,selectLogin} from './../store/Featuers/LoginSlice';
+import { RootState } from "@/store/store";
+import { toast } from 'react-toastify';
+
 
 interface LoginPageProps {
   onSwitchToRegister: () => void;
 }
 
 export function LoginPage({ onSwitchToRegister }: LoginPageProps) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle login logic here
-    console.log('Login attempt:', { email, password });
-  };
+
+
+
+  const schema = z.object({
+    identifier : z.string().email("Invalid email address").min(1, "Email is required"),
+    password : z.string().min(6,"Password must be at least 6 characters")
+  })
+  const { data, loading, error } = useSelector((state: RootState) => state.login);
+
+
+  const dispatch = useDispatch()
+
+ const {register ,handleSubmit , formState: { errors }}=useForm<LoginInterface>({
+  resolver: zodResolver(schema),
+ })
+ const onSubmit: SubmitHandler<LoginInterface> = (data) => {
+   dispatch(userLogin({ identifier: data.identifier, password: data.password }))
+   console.log(data)
+ }
+
+
 
   return (
     <div className="flex min-h-screen">
@@ -39,49 +64,32 @@ export function LoginPage({ onSwitchToRegister }: LoginPageProps) {
             <p className="text-gray-600">Access your account</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
             <div className="space-y-4">
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  Email address
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5 text-gray-400" />
+            {Login.map(({ icon: Icon, id, label, placeholder, type })=>(
+                  <div  key={id}>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  {label}
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Icon className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      id={id}
+                      type={type}
+                      {...register(id)}
+                      className={`block w-full pl-10 pr-3 py-2 border ${
+                        errors[id] ? "border-red-500" : "border-gray-300"
+                      } rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent focus:outline-none`}
+                      placeholder={placeholder}
+                    />
                   </div>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                    placeholder="Enter your email"
-                  />
+                  {errors[id] && (
+                      <p className="mt-1 text-sm text-red-500">{errors[id]?.message}</p>
+                    )}
                 </div>
-              </div>
-
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                    placeholder="Enter your password"
-                  />
-                </div>
-              </div>
+             ))}
             </div>
 
             <div className="flex items-center justify-between">
@@ -101,13 +109,20 @@ export function LoginPage({ onSwitchToRegister }: LoginPageProps) {
               </button>
             </div>
 
-            <button
-              type="submit"
-              className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
-            >
-              Sign in
-              <ArrowRight className="h-4 w-4" />
-            </button>
+                  <button
+                    type="submit"
+                    className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 disabled:opacity-75"
+                    disabled={loading}
+                  >
+                    {loading ? (
+                    <Loader size={20} className="animate-spin" />
+                    ) : (
+                      <>
+                        Sign in
+                        <ArrowRight className="h-4 w-4" />
+                      </>
+                    )}
+               </button>
           </form>
 
           <p className="text-center text-sm text-gray-600">
@@ -118,6 +133,8 @@ export function LoginPage({ onSwitchToRegister }: LoginPageProps) {
             >
               Sign up
             </button>
+           
+
           </p>
         </div>
       </div>

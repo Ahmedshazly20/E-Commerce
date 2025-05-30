@@ -3,14 +3,19 @@ import Layout from "../Pages/Layout";
 import ProductsPage from "../Pages/ProductsPage";
 import Testing from "../Pages/TestingPgage";
 import Auth from './../Pages/Auth';
+import ProtectedRoute from "../Component/ProtectedRoute";
+
+
 
 const router = createBrowserRouter([
+
   {
     path: "/",
     element: <Layout />, 
     children: [
       {
         path: "/",
+        index:true,
         element: <div>Hello world!</div>,
       },
       {
@@ -25,7 +30,9 @@ const router = createBrowserRouter([
   },
   {
     path: "/Auth",
-    element: <Auth/>,
+    element:<ProtectedRoute isAuthenticated={false}>
+                 <Auth/>
+    </ProtectedRoute> ,
   },
 ]);
 

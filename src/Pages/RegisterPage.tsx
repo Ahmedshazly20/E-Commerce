@@ -1,34 +1,42 @@
-import { useState } from 'react';
-import {  ArrowRight } from 'lucide-react';
-import { formFields } from '../data/data';
-import { FormData } from '../interface/interface';
+import { useForm, SubmitHandler  } from "react-hook-form";
+import { ArrowRight } from "lucide-react";
+import { formFields } from "../data/data";
+import { FormData } from "@/interface/interface";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+// Define the Zod schema for validation
+const schema = z.object({
+    firstName: z.string().min(2, "First name is required"),
+    lastName: z.string().min(1, "Last name is required"),
+    email: z.string().email("Invalid email address").min(1, "Email is required"),
+    phone: z
+      .string()
+      .min(11, "Number must be at least 11 digits")
+      .regex(/^\d{10,15}$/, "Phone number must be between 10 and 15 digits"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string().min(6, "Confirm password is required"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+// Infer the TypeScript type from the schema
+type FormData = z.infer<typeof schema>;
+
 interface RegisterPageProps {
   onSwitchToLogin: () => void;
 }
 
 export function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
-  const [formData, setFormData] = useState<FormData>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
-    confirmPassword: '',
+  // Initialize useForm with TypeScript and Zod resolver
+  const {register,handleSubmit,formState: { errors },} = useForm<FormData>({
+    resolver: zodResolver(schema),
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    console.log('Registration attempt:', formData);
-  };
-
- 
-    
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  
+  const onSubmit: SubmitHandler<FormData> = (data) => console.log(data)
 
   return (
     <div className="flex min-h-screen">
@@ -54,30 +62,33 @@ export function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
             <p className="text-gray-600">Join us and start shopping</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
             <div className="space-y-4">
-
-                {formFields.map(({icon : Icon ,  id ,label , placeholder ,type})=>(
-                   <div key={id}>
-                   <label htmlFor={label} className="block text-sm font-medium text-gray-700 mb-2">
-                      {label}
-                   </label>
-                   <div className="relative">
-                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                     <Icon className="h-5 w-5 text-gray-400" />
-                     </div>
-                     <input
-                       id={label}
-                       name={id}
-                       type={type}
-                       required
-                       value={formData[name]}
-                       onChange={handleChange}
-                       className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                       placeholder={placeholder}
-                     />
-                   </div>
-                   </div>))}
+              {formFields.map(({ icon: Icon, id, label, placeholder, type }) => (
+                <div key={id}>
+                  <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-2">
+                    {label}
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Icon className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                        id={id}
+                        type={type}
+                        {...register(id)}
+                        className={`block w-full pl-10 pr-3 py-2 border ${
+                          errors[id] ? "border-red-500" : "border-gray-300"
+                        } rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent focus:outline-none`}
+                        placeholder={placeholder}
+                      />
+                                        
+                  </div>
+                  {errors[id] && (
+                      <p className="mt-1 text-sm text-red-500">{errors[id]?.message}</p>
+                    )}
+                </div>
+              ))}
             </div>
 
             <button
@@ -90,8 +101,11 @@ export function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
           </form>
 
           <p className="text-center text-sm text-gray-600">
-            Already have an account?{' '}
-            <button onClick={onSwitchToLogin} className="font-medium text-indigo-600 hover:text-indigo-500" >
+            Already have an account?{" "}
+            <button
+              onClick={onSwitchToLogin}
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
               Sign in
             </button>
           </p>

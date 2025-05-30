@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaHeart, FaShoppingCart, FaUser, FaBars } from "react-icons/fa";
+import CookieService from "../Services/CreateServices";
+
 
 const navLinks = [
   { title: "Home", path: "/" },
@@ -9,9 +11,13 @@ const navLinks = [
   { title: "Contact Us", path: "/contact" },
 ];
 
+const isAuthenticated = CookieService.get("jwt");
+
+
+
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [islogin, setislogin] = useState(false);
+  const [islogin, setislogin] = useState(true);
 
   
 
@@ -47,9 +53,9 @@ const Navbar: React.FC = () => {
           </Link>
 
 
-             {islogin ? <Link className="hover:text-gray-200 text-xl" to="#">
+             {islogin ? <Link className="hover:text-gray-200 text-xl" to="/Auth">
                     <FaUser />
-                 </Link> : <button>log in</button> }
+                 </Link> : <button><Link to="/Auth">log in</Link></button> }
         </div>
       </div>
 
