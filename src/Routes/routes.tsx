@@ -4,8 +4,11 @@ import ProductsPage from "../Pages/ProductsPage";
 import Testing from "../Pages/TestingPgage";
 import Auth from './../Pages/Auth';
 import ProtectedRoute from "../Component/ProtectedRoute";
+import Contact from "../Pages/ContactUs";
+import CookieService from "../Services/CreateServices"
 
 
+const isAuthenticated = CookieService.get("Jwt");
 
 const router = createBrowserRouter([
 
@@ -23,6 +26,13 @@ const router = createBrowserRouter([
         element: <ProductsPage />,
       },
       {
+        path: "/Contact",
+
+        element:<ProtectedRoute isAuthenticated={isAuthenticated}>
+                       <Contact />
+              </ProtectedRoute>,
+      },
+      {
         path: "/testing",
         element: <Testing />,
       },
@@ -30,9 +40,9 @@ const router = createBrowserRouter([
   },
   {
     path: "/Auth",
-    element:<ProtectedRoute isAuthenticated={false}>
-                 <Auth/>
-    </ProtectedRoute> ,
+    element:<ProtectedRoute isAuthenticated={isAuthenticated}>
+                 <Auth />
+    </ProtectedRoute>,
   },
 ]);
 

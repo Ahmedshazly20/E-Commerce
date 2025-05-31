@@ -5,11 +5,9 @@ import { Navigate } from 'react-router-dom';
 
 function Auth() {
   const [currentPage, setCurrentPage] = useState<'login' | 'register'>('login');
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
-  if(isAuthenticated){
-    return <Navigate to="/" />
-  }else{
+
+
     return (
       <div className="min-h-screen bg-gray-50">
       {currentPage === 'login' ? (
@@ -19,7 +17,7 @@ function Auth() {
     )}
   </div>
   )
-  } 
+  
         
    
 }

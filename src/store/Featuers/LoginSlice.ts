@@ -1,9 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { axiosInstance } from '../../api/axios.config';
 import { RootState } from '../store';
-import { toast } from 'react-toastify';
+import { Bounce, toast } from 'react-toastify';
 import CookieService from '../../Services/CreateServices';
-
 interface Tinitstate {
   data: any;
   error: any;

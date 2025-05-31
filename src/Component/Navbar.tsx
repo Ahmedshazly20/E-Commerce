@@ -8,21 +8,23 @@ const navLinks = [
   { title: "Home", path: "/" },
   { title: "Products", path: "/products" },
   { title: "Collections", path: "/collections" },
-  { title: "Contact Us", path: "/contact" },
+  { title: "Contact Us", path: "/Contact" },
 ];
 
-const isAuthenticated = CookieService.get("jwt");
+const isAuthenticated = CookieService.get("Jwt");
 
+console.log(isAuthenticated);
 
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [islogin, setislogin] = useState(true);
+  const [islogin, setislogin] = useState(false);
 
+  
   
 
   return (
-    <nav className="flex justify-between bg-gray-900 text-white w-screen">
+    <nav className="flex justify-between bg-indigo-500 text-white w-screen mb-9">
       <div className="px-5 xl:px-12 py-6 flex w-full items-center">
         {/* Logo */}
         <Link to="/" className="text-3xl font-bold">
@@ -53,7 +55,7 @@ const Navbar: React.FC = () => {
           </Link>
 
 
-             {islogin ? <Link className="hover:text-gray-200 text-xl" to="/Auth">
+             {isAuthenticated ? <Link className="hover:text-gray-200 text-xl" to="/Profile">
                     <FaUser />
                  </Link> : <button><Link to="/Auth">log in</Link></button> }
         </div>
