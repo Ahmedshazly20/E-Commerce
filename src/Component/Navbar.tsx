@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaHeart, FaShoppingCart, FaUser, FaBars } from "react-icons/fa";
+import { FaHeart, FaShoppingCart, FaBars } from "react-icons/fa";
 import CookieService from "../Services/CreateServices";
+import MenuItems from "./dropdown";
+import MenuItemDropdwon from "./dropdown";
 
 
 const navLinks = [
@@ -9,6 +11,7 @@ const navLinks = [
   { title: "Products", path: "/products" },
   { title: "Collections", path: "/collections" },
   { title: "Contact Us", path: "/Contact" },
+
 ];
 
 const isAuthenticated = CookieService.get("Jwt");
@@ -18,7 +21,6 @@ console.log(isAuthenticated);
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [islogin, setislogin] = useState(false);
 
   
   
@@ -28,7 +30,7 @@ const Navbar: React.FC = () => {
       <div className="px-5 xl:px-12 py-6 flex w-full items-center">
         {/* Logo */}
         <Link to="/" className="text-3xl font-bold">
-          Logo Here.
+          Delta
         </Link>
 
         {/* Navigation Links */}
@@ -54,28 +56,37 @@ const Navbar: React.FC = () => {
             <span className="relative inline-flex h-3 w-3 rounded-full bg-pink-500"></span>
           </Link>
 
+ 
+             {isAuthenticated ? 
+                  
+                    <MenuItemDropdwon />
 
-             {isAuthenticated ? <Link className="hover:text-gray-200 text-xl" to="/Profile">
-                    <FaUser />
-                 </Link> : <button><Link to="/Auth">log in</Link></button> }
+                    
+                  : <button><Link to="/Auth">log in</Link></button> }
         </div>
       </div>
 
       {/* Mobile Menu Button */}
       <button className="xl:hidden mr-6 text-xl" onClick={() => setIsOpen(!isOpen)}>
-        <FaBars />
+        <div className="flex justify-center">
+        <MenuItemDropdwon  />
+        <FaBars className="text-2xl ml-2" />
+      
+        </div>
       </button>
 
       {/* Mobile Menu */}
       {isOpen && (
-        <ul className="absolute top-16 left-0 bg-gray-900 text-white w-full p-5 space-y-3">
+        <ul className="absolute top-16 left-0 bg-gray-50 text-gray-900 w-full p-5 space-y-3">
           {navLinks.map((link) => (
-            <li key={link.path}>
-              <Link className="block hover:text-gray-200" to={link.path}>
+            <li key={link.path} className="x-2 py-1">
+              <Link  to={link.path}>
                 {link.title}
               </Link>
             </li>
           ))}
+          
+          
         </ul>
       )}
     </nav>

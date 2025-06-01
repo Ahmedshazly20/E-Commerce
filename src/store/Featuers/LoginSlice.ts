@@ -49,8 +49,9 @@ const loginSlice = createSlice({
         const IN_DAYS= 5;
         
         date.setTime(date.getTime() + IN_DAYS * 24 * 60 * 60 * 1000);
-        const options = {path:"/", expires:date}
+        const options = {path:"/", expires:date ,}
         CookieService.set("Jwt",action.payload.jwt,options);
+        CookieService.set("User",action.payload.user.username ,options);
         state.error = null;
         toast.success( `😉🤗 Welcom ${action.payload.user.username}`, {
           position: "top-right",

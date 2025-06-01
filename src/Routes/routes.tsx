@@ -1,24 +1,22 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Layout from "../Pages/Layout";
 import ProductsPage from "../Pages/ProductsPage";
 import Testing from "../Pages/TestingPgage";
 import Auth from './../Pages/Auth';
 import ProtectedRoute from "../Component/ProtectedRoute";
 import Contact from "../Pages/ContactUs";
-import CookieService from "../Services/CreateServices"
-
+import CookieService from "../Services/CreateServices";
 
 const isAuthenticated = CookieService.get("Jwt");
 
 const router = createBrowserRouter([
-
   {
     path: "/",
     element: <Layout />, 
     children: [
       {
         path: "/",
-        index:true,
+        index: true,
         element: <div>Hello world!</div>,
       },
       {
@@ -27,10 +25,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/Contact",
-
-        element:<ProtectedRoute isAuthenticated={isAuthenticated}>
-                       <Contact />
-              </ProtectedRoute>,
+        element: (
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <Contact />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/testing",
@@ -40,9 +39,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/Auth",
-    element:<ProtectedRoute isAuthenticated={isAuthenticated}>
-                 <Auth />
-    </ProtectedRoute>,
+    element: !isAuthenticated ? <Auth /> : <Navigate  to="/" replace />,
   },
 ]);
 
