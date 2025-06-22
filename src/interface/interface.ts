@@ -11,7 +11,7 @@ interface ThumbnailFormat {
     url: string | null;
 }
 
-interface Thumbnail {
+export interface Thumbnail {
     id: number;
     documentId: string;
     name: string;
@@ -49,4 +49,13 @@ export interface FormData {
   export interface LoginInterface{
     identifier: string;
     password: string;
+  }
+
+
+  export interface CartItem {
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+    image: string;
   }

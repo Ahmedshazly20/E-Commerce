@@ -1,13 +1,30 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
   "compilerOptions": {
-    "baseUrl": "./",
+    "jsx": "react-jsx",
+    "module": "esnext",
+    "target": "es2018", 
+    "lib": ["dom", "dom.iterable", "esnext"], 
+    "allowJs": true, 
+    "skipLibCheck": true,
+    "esModuleInterop": true, 
+    "allowSyntheticDefaultImports": true,
+    "strict": true, 
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true, 
+    "resolveJsonModule": true, 
+    "isolatedModules": true, 
+
+
+    "moduleResolution": "node",
+
+    "baseUrl": "src",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/components/*": ["components/*"],
+      "@/lib/*": ["lib/*"],
+      "@/components/ui/*": ["components/ui/*"],
+      "@/hooks/*": ["hooks/*"]
     }
-  }
+  },
+  "include": ["src"], 
+  "exclude": ["node_modules"] 
 }

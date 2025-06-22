@@ -1,3 +1,4 @@
+import React from 'react'
 import { Button, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { FaUser } from "react-icons/fa";
@@ -55,7 +56,7 @@ export default function MenuItemDropdwon() {
       <DropdownMenuContent className="w-60 bg-gray-50" align="start">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="hover:bg-slate-400 cursor-pointer hover:text-white ">
             <Link to="/profile">
             Profile
             </Link>

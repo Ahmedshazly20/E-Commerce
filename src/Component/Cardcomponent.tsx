@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { MdAddShoppingCart } from "react-icons/md";
-
 import { Product } from '../interface/interface';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query'
 import  ProductSkeleton  from './ProductSkeleton';
 import { discraptionclise ,titleclise } from '../utils/Functions';
-
+import { useDispatch } from 'react-redux';
+import { AddToCart } from '../store/Featuers/CartSlice';
 
 
 
@@ -15,7 +15,8 @@ export default function Cardcomponent() {
   const ApiUrl = import.meta.env.VITE_SERVER_URL;
 
 
-  
+  const dispatch = useDispatch()
+
   
   const fetchProducts = async () => {
     try {
@@ -67,8 +68,7 @@ export default function Cardcomponent() {
             <div className='flex items-center gap-2 bg-[#0ea5e9] text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors'>
             <MdAddShoppingCart />
 
-              <button className="">addToCart
-            </button>
+              <button className="" onClick={()=>dispatch(AddToCart(produc))} >addToCart</button>
             </div>
           
           </div>
