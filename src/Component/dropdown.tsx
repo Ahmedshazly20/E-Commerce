@@ -24,7 +24,7 @@ import { Bounce, toast } from 'react-toastify';
 export default function MenuItemDropdwon() {
   
   const userdata = CookieService.get("User")
-
+  const isAuthenticated = CookieService.get("Jwt");
   const handleLogout = () => {
     toast.success( `🥺😢 See you soon Mr ${userdata}`, {
       position: "top-right",
@@ -41,11 +41,7 @@ export default function MenuItemDropdwon() {
     setTimeout(()=>{
       CookieService.remove('Jwt');
       window.location.href = '/Auth';
-    },3000);
-
-
-    
-    
+    },3000);   
   };
 
   return (

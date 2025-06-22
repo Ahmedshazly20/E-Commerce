@@ -34,12 +34,9 @@ export default function Cardcomponent() {
 
   if (isPending) {
     return(  
-
-      
       <>
          {  Array.from({length:20}).map((_,idx)=> 
         <ProductSkeleton key={idx}/>)}
-    
         </>
     )}
    

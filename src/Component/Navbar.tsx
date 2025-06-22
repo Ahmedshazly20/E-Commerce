@@ -1,14 +1,10 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaHeart, FaBars } from "react-icons/fa";
-import { PiShoppingCartSimpleBold } from "react-icons/pi";
 import { useSelector , useDispatch } from "react-redux";
 import { RootState } from '../store/store';
 import CookieService from "../Services/CreateServices";
-import MenuItemDropdwon from "./dropdown";
-import DrawerCart from "./CartDrower";
 import { FiShoppingCart, FiUser, FiMenu, FiX, FiHeart, FiSearch } from 'react-icons/fi';
-import Example from "./ProfileDropDown";
+import NavDropDown from "./NavDropDown";
 
 
   const navItems = [
@@ -49,7 +45,7 @@ const Navbar = () => {
              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
               <FiMenu className="text-white text-lg" />
             </div> */}
-            <h1 className="text-xl font-bold text-gray-900 mr-1">ElectroStore</h1>
+            <h1 className="text-xl font-bold text-gray-900 mr-1">Electro Store</h1>
           </div>
 
           {/* Desktop Navigation */}
@@ -104,7 +100,7 @@ const Navbar = () => {
               className="p-2 text-gray-600 hover:text-primary transition-colors"
             >
              
-              <Example/>
+              <NavDropDown/>
             </button>
 
             {/* Mobile Menu Button */}

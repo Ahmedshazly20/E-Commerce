@@ -6,13 +6,14 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/store';
 import { imgReturn, titleclise } from '../utils/Functions';
-
+import { useDispatch } from 'react-redux';
+import { clearcart,decreaseQuantity ,increaseQuantity,removeFromCart } from '../store/Featuers/CartSlice';
 
 
 const Cart = () => {
   const navigate = useNavigate();
   const cartItemCount = useSelector((state: RootState) => state.cart.cartProduct)
-
+  const dispatch = useDispatch()
   const [cartItems, setCartItems] = useState<CartItem[]>([
     {
       id: 1,
@@ -36,12 +37,10 @@ const Cart = () => {
       image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=300&h=300&fit=crop'
     }
   ]);
+  
 
 
 
-  const clearCart = () => {
-    setCartItems([]);
-  };
 
   const totalPrice = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -82,7 +81,7 @@ const Cart = () => {
               <div className="p-6 border-b border-gray-200 flex items-center justify-between">
                 <h2 className="text-lg font-semibold">Cart Items</h2>
                 <button
-                  onClick={clearCart}
+                  onClick={()=>dispatch(clearcart())}
                   className="text-red-600 hover:text-red-700 transition-colors flex items-center gap-2"
                 >
                   <FiTrash2 />
@@ -91,7 +90,7 @@ const Cart = () => {
               </div>
               
               <div className="divide-y divide-gray-200">
-                { cartItemCount.map(({id, documentId, description,price,thumbnail,categories,title}) => (
+                { cartItemCount.map(({id, documentId, description,price,thumbnail,categories,title,quantity}) => (
                   <div
                     key={id}
                     className="p-6 animate-fade-in"
@@ -110,30 +109,30 @@ const Cart = () => {
                       </div>
                       
                       <div className="flex items-center gap-3">
-                        {/* <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-2">
+                        <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            onClick={()=>dispatch(decreaseQuantity(id))}
                             className="p-1 hover:bg-white rounded-full transition-colors"
                           >
                             <FiMinus className="text-gray-600" />
                           </button>
                           <span className="px-3 py-1 bg-white rounded-md font-medium min-w-[3rem] text-center">
-                            {item.quantity}
+                            {quantity}
                           </span>
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                           onClick={()=>dispatch(increaseQuantity(id))}
                             className="p-1 hover:bg-white rounded-full transition-colors"
                           >
                             <FiPlus className="text-gray-600" />
                           </button>
-                        </div> */}
+                        </div>
                         
-                        {/* <button
-                          onClick={() => removeItem(item.id)}
+                        <button
+                          onClick={()=>dispatch(removeFromCart(id))}
                           className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
                         >
                           <FiTrash2 />
-                        </button> */}
+                        </button>
                       </div>
                     </div>
                   </div>
