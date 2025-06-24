@@ -19,6 +19,7 @@ export interface Thumbnail {
     caption: string | null;
     width: number;
     height: number;
+    url:string;
     formats: {
         thumbnail: ThumbnailFormat;
     };

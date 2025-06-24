@@ -65,14 +65,17 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "LastName": {
-      "type": "string"
+    "lastname": {
+      "type": "string",
+      "required": true
     },
-    "FirstName": {
-      "type": "string"
+    "firstname": {
+      "type": "string",
+      "required": true
     },
     "Phone": {
-      "type": "biginteger"
+      "type": "biginteger",
+      "required": true
     }
   }
 }

@@ -7,6 +7,7 @@ import ProtectedRoute from "../Component/ProtectedRoute";
 import Contact from "../Pages/ContactUs";
 import CookieService from "../Services/CreateServices";
 import Cart from './../Pages/Cart';
+import ProductDetails from "../Pages/ProductDetails";
 
 const isAuthenticated = CookieService.get("Jwt");
 
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
         path: "/products",
         element: <ProductsPage />,
       },
+      {
+        path: "/products/:id",
+        element: <ProductDetails />,
+      },     
       {
         path: "/mycart",
         element: <Cart />,

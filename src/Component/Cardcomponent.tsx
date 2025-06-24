@@ -7,12 +7,14 @@ import  ProductSkeleton  from './ProductSkeleton';
 import { discraptionclise ,titleclise } from '../utils/Functions';
 import { useDispatch } from 'react-redux';
 import { AddToCart } from '../store/Featuers/CartSlice';
-
+import { Link } from 'react-router-dom';
 
 
 export default function Cardcomponent() {
   const [Productlist, setProductlist] = useState<Product[]>([]);
   const ApiUrl = import.meta.env.VITE_SERVER_URL;
+  
+ 
 
 
   const dispatch = useDispatch()
@@ -22,6 +24,7 @@ export default function Cardcomponent() {
     try {
       const res = await axios.get(`${ApiUrl}/api/products?populate=thumbnail&populate=categories`);
       setProductlist(res.data.data);
+      
     } catch (error) {
       console.error("Failed to fetch products:", error);
     }
@@ -32,10 +35,12 @@ export default function Cardcomponent() {
     queryFn: fetchProducts,
   })
 
+ 
+
   if (isPending) {
     return(  
       <>
-         {  Array.from({length:20}).map((_,idx)=> 
+         { Array.from({length:20}).map((_,idx)=> 
         <ProductSkeleton key={idx}/>)}
         </>
     )}
@@ -56,7 +61,7 @@ export default function Cardcomponent() {
           <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300" />
         </div>
         <div className="p-5 min-h-[190px] flex flex-col justify-between">
-          <h3 className="font-semibold text-gray-900 text-lg mb-2">{titleclise(produc.title)}</h3>
+          <Link  to={`${produc.documentId}`} className="font-semibold text-gray-900 text-lg mb-2 hover:text-sky-500 cursor-pointer">{titleclise(produc.title)}</Link>
           <p className="text-sm text-gray-600 mb-4">{discraptionclise(produc.description)}</p>
           <div className="flex items-center justify-between">
             <span className="text-lg font-bold text-[#0284c7]">
@@ -71,11 +76,6 @@ export default function Cardcomponent() {
           </div>
         </div>
       </div>
-      
-      
-      
-      
-      
       ))):<div>there is server err </div>
 
 
