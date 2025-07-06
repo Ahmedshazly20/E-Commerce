@@ -25,7 +25,7 @@ const ProductManagement = () => {
 
 
   const {data, error, isLoading} = useGetDashboardProductsQuery()
-  console.log(data)
+  console.log(data.data)
   const handleSelectProduct = (productId: string) => {
     setSelectedProducts(prev => 
       prev.includes(productId) 
