@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Plus, Minus, X } from 'lucide-react';
 import { PiShoppingCartSimpleBold } from 'react-icons/pi';
 import { useSelector } from 'react-redux';
-import { RootState } from 'store/store';
+import { RootState } from '../store/store';
 import { titlDrowereclise } from '../utils/Functions';
 
 const DrawerCart = () => {

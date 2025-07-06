@@ -23,9 +23,8 @@ export default function Cardcomponent() {
   const fetchProducts = async () => {
     try {
       const res = await axios.get(`${ApiUrl}/api/products?populate=thumbnail&populate=categories`);
-      setProductlist(res.data.data);
-      
-    } catch (error) {
+      console.log(res.data.data);
+      setProductlist(res.data.data);} catch (error) {
       console.error("Failed to fetch products:", error);
     }
   };
@@ -46,6 +45,7 @@ export default function Cardcomponent() {
     )}
    
   
+
   
     return (
       <>
@@ -54,7 +54,7 @@ export default function Cardcomponent() {
         <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
         <div className="relative group">
           <img
-              src={produc?.thumbnail?.formats?.thumbnail?.url ? ApiUrl + produc.thumbnail.formats.thumbnail.url : 'placeholderImage.png'} 
+              src={ ApiUrl + produc.thumbnail[0].url } 
              alt={produc.title}
             className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
           />

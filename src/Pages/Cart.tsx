@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
 import { CartItem } from 'interface/interface';
 import { FiTrash2, FiPlus, FiMinus, FiShoppingCart, FiArrowRight } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { RootState } from 'store/store';
+import { RootState } from '../store/store';
 import { imgReturn, titleclise } from '../utils/Functions';
 import { useDispatch } from 'react-redux';
 import { clearcart,decreaseQuantity ,increaseQuantity,removeFromCart } from '../store/Featuers/CartSlice';

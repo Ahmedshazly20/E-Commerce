@@ -25,7 +25,7 @@ export interface Thumbnail {
     };
 }
 
-export interface Product {
+export default interface Product {
     id: number;
     documentId: string;
     title: string;
@@ -51,7 +51,24 @@ export interface FormData {
     identifier: string;
     password: string;
   }
-
+  export interface RegisterFormData {
+    firstname: string;
+    lastname: string;
+    username: string;
+    email: string;
+    Phone: string;
+    password: string;
+    confirmPassword: string;
+  }
+  
+  export interface RegusterInterface {
+    username: string;
+    password: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    Phone: string;
+  }
 
   export interface CartItem {
     id: number;
@@ -60,3 +77,5 @@ export interface FormData {
     quantity: number;
     image: string;
   }
+
+  

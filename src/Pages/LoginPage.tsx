@@ -1,4 +1,3 @@
-
 import { useForm, SubmitHandler  } from "react-hook-form";
 import { useDispatch,useSelector } from "react-redux";
 
@@ -8,7 +7,7 @@ import {  ArrowRight ,Loader,LoaderCircle } from 'lucide-react';
 import { LoginInterface } from "../interface/interface";
 import { Login} from "../data/data";
 import { userLogin ,selectLogin} from './../store/Featuers/LoginSlice';
-import { RootState } from "@/store/store";
+import { RootState, AppDispatch } from "../store/store";
 import { toast } from 'react-toastify';
 
 
@@ -28,7 +27,7 @@ export function LoginPage({ onSwitchToRegister }: LoginPageProps) {
   const { data, loading, error } = useSelector((state: RootState) => state.login);
 
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
 
  const {register ,handleSubmit , formState: { errors }}=useForm<LoginInterface>({
   resolver: zodResolver(schema),
@@ -78,15 +77,15 @@ export function LoginPage({ onSwitchToRegister }: LoginPageProps) {
                     <input
                       id={id}
                       type={type}
-                      {...register(id)}
+                      {...register(id as keyof LoginInterface)}
                       className={`block w-full pl-10 pr-3 py-2 border ${
-                        errors[id] ? "border-red-500" : "border-gray-300"
+                        errors[id as keyof LoginInterface] ? "border-red-500" : "border-gray-300"
                       } rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent focus:outline-none`}
                       placeholder={placeholder}
                     />
                   </div>
-                  {errors[id] && (
-                      <p className="mt-1 text-sm text-red-500">{errors[id]?.message}</p>
+                  {errors[id as keyof LoginInterface] && (
+                      <p className="mt-1 text-sm text-red-500">{errors[id as keyof LoginInterface]?.message}</p>
                     )}
                 </div>
              ))}

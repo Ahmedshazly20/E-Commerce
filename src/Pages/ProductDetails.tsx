@@ -111,7 +111,8 @@ const ProductDetails = () => {
           <div className="space-y-4">
             <div className="aspect-square rounded-lg overflow-hidden bg-white">
               <img
-                src={`${ApiUrl}${product.thumbnail.url}`}
+                
+                src={ ApiUrl + product.thumbnail[0].url } 
                 alt={product.title}
                 className="w-full h-full object-cover"
               />

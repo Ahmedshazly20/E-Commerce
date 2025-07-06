@@ -11,6 +11,7 @@
   "options": {
     "draftAndPublish": false
   },
+  "pluginOptions": {},
   "attributes": {
     "username": {
       "type": "string",
@@ -65,17 +66,24 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "lastname": {
-      "type": "string",
-      "required": true
-    },
     "firstname": {
       "type": "string",
       "required": true
     },
-    "Phone": {
-      "type": "biginteger",
+    "lastname": {
+      "type": "string",
       "required": true
+    },
+    "cart": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::cart.cart",
+      "mappedBy": "user"
+    },
+    "Phone": {
+      "type": "integer",
+      "required": true,
+      "min": 11
     }
   }
 }

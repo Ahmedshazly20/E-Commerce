@@ -2,14 +2,11 @@
   "kind": "collectionType",
   "collectionName": "categories",
   "info": {
+    "displayName": "Category",
     "singularName": "category",
     "pluralName": "categories",
-    "displayName": "category"
+    "description": ""
   },
-  "options": {
-    "draftAndPublish": true
-  },
-  "pluginOptions": {},
   "attributes": {
     "title": {
       "type": "string"
@@ -18,7 +15,12 @@
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::product.product",
-      "inversedBy": "categories"
+      "mappedBy": "categories"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
     }
   }
 }

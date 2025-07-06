@@ -8,6 +8,11 @@ import Contact from "../Pages/ContactUs";
 import CookieService from "../Services/CreateServices";
 import Cart from './../Pages/Cart';
 import ProductDetails from "../Pages/ProductDetails";
+import AdminLayout from "../Pages/Admin/AdminLayout";
+import UserManagement from './../Pages/Admin/UsersPage';
+import ProductManagement from './../Pages/Admin/ProductMangment';
+import OrdersPage from "./../Pages/Admin/Orders";
+import CustomerSupport from "./../Pages/Admin/CustomerSupport";
 
 const isAuthenticated = CookieService.get("Jwt");
 
@@ -47,6 +52,52 @@ const router = createBrowserRouter([
       },
     ],
   },
+
+  //admin dashboard
+      {
+        path: "/dashboard",
+        element: <AdminLayout />, 
+        children: [
+        {
+          path: "/dashboard",
+          index: true,
+          element: <div>Hello from dashboard!</div>,
+        },
+        {
+          path: "/dashboard/users",
+          element: <UserManagement />,
+        },
+        {
+          path: "/dashboard/OrdersPage",
+          element: <OrdersPage />,
+        },     
+        {
+          path: "/dashboard/analytics",
+          element: <Cart />,
+        },
+        {
+          path: "/dashboard/ProductManagement",
+          element: <ProductManagement />,
+        },
+        {
+          path: "/dashboard/CustomerSupport",
+          element: <CustomerSupport />,
+        },
+        {
+          path: "Contact",
+          element: (
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <Contact />
+            </ProtectedRoute>
+          ),
+        },
+       
+      ],
+    },
+
+  
+
+
   {
     path: "/Auth",
     element: !isAuthenticated ? <Auth /> : <Navigate  to="/" replace />,

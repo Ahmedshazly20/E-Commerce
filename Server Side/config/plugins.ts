@@ -1,11 +1,9 @@
 module.exports = ({ env }) => ({
-    // ...
-    "users-permissions": {
+    'users-permissions': {
       config: {
         register: {
-          allowedFields: ["firstname", "lastname","Phone"], // Add your custom fields here
+          allowedFields: ['firstname', 'lastname', 'Phone'],
         },
       },
     },
-    // ...
   });

@@ -1,16 +1,23 @@
+import React from 'react';
 import { useForm, SubmitHandler  } from "react-hook-form";
 import { ArrowRight } from "lucide-react";
 import { formFields } from "../data/data";
-import { FormData } from "@/interface/interface";
+import { RegisterFormData } from "../interface/interface";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { useDispatch,useSelector } from "react-redux";
+import { RootState, AppDispatch } from '../store/store';
+import { registerUser  } from '../store/Featuers/RegusterSlice';
+
 
 // Define the Zod schema for validation
 const schema = z.object({
-    firstName: z.string().min(2, "First name is required"),
-    lastName: z.string().min(1, "Last name is required"),
+    firstname: z.string().min(2, "First name is required"),
+    lastname: z.string().min(1, "Last name is required"),
+    username: z.string().min(1, "Username is required"),
+    
     email: z.string().email("Invalid email address").min(1, "Email is required"),
-    phone: z
+    Phone: z
       .string()
       .min(11, "Number must be at least 11 digits")
       .regex(/^\d{10,15}$/, "Phone number must be between 10 and 15 digits"),
@@ -22,21 +29,35 @@ const schema = z.object({
     path: ["confirmPassword"],
   });
 
-// Infer the TypeScript type from the schema
-type FormData = z.infer<typeof schema>;
+  //const { data, loading, error } = useSelector((state: RootState) => state.register);
 
 interface RegisterPageProps {
   onSwitchToLogin: () => void;
 }
 
 export function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
-  // Initialize useForm with TypeScript and Zod resolver
-  const {register,handleSubmit,formState: { errors },} = useForm<FormData>({
-    resolver: zodResolver(schema),
-  });
-
+  const dispatch = useDispatch<AppDispatch>()
+  const { data, loading, error } = useSelector((state: RootState) => state.register);
   
-  const onSubmit: SubmitHandler<FormData> = (data) => console.log(data)
+  const {register ,handleSubmit , formState: { errors }}=useForm<RegisterFormData>({
+    resolver: zodResolver(schema),
+   })
+   const onSubmit: SubmitHandler<RegisterFormData> = (data) => {
+     const registerData = {
+      username: data.username, 
+       password: data.password, 
+       firstname: data.firstname, 
+       lastname: data.lastname, 
+       email: data.email, 
+       Phone: data.Phone, 
+       
+     }
+     dispatch(registerUser(registerData))
+    
+   }
+  
+// Infer the TypeScript type from the schema
+type FormData = z.infer<typeof schema>;
 
   return (
     <div className="flex min-h-screen">
@@ -62,7 +83,7 @@ export function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
             <p className="text-gray-600">Join us and start shopping</p>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
+          <form  onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
             <div className="space-y-4">
               {formFields.map(({ icon: Icon, id, label, placeholder, type }) => (
                 <div key={id}>
@@ -76,16 +97,16 @@ export function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
                     <input
                         id={id}
                         type={type}
-                        {...register(id)}
+                        {...register(id as keyof RegisterFormData)}
                         className={`block w-full pl-10 pr-3 py-2 border ${
-                          errors[id] ? "border-red-500" : "border-gray-300"
+                          errors[id as keyof RegisterFormData] ? "border-red-500" : "border-gray-300"
                         } rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent focus:outline-none`}
                         placeholder={placeholder}
                       />
                                         
                   </div>
-                  {errors[id] && (
-                      <p className="mt-1 text-sm text-red-500">{errors[id]?.message}</p>
+                  {errors[id as keyof RegisterFormData] && (
+                      <p className="mt-1 text-sm text-red-500">{errors[id as keyof RegisterFormData]?.message}</p>
                     )}
                 </div>
               ))}
@@ -93,9 +114,10 @@ export function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
 
             <button
               type="submit"
-              className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+              disabled={loading}
+              className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 disabled:opacity-75"
             >
-              Create Account
+              {loading ? "Creating Account..." : "Create Account"}
               <ArrowRight className="h-4 w-4" />
             </button>
           </form>

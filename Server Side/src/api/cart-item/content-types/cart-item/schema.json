@@ -2,26 +2,27 @@
   "kind": "collectionType",
   "collectionName": "cart_items",
   "info": {
+    "displayName": "Cart Item",
     "singularName": "cart-item",
     "pluralName": "cart-items",
-    "displayName": "cartItem"
+    "description": ""
   },
-  "options": {
-    "draftAndPublish": true
-  },
-  "pluginOptions": {},
   "attributes": {
-    "name": {
-      "type": "string"
-    },
-    "price": {
-      "type": "integer"
-    },
     "quantity": {
-      "type": "integer"
+      "type": "integer",
+      "required": true
     },
-    "image": {
-      "type": "string"
+    "cart": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::cart.cart",
+      "inversedBy": "cart_items"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::product.product",
+      "inversedBy": "cart_items"
     }
   }
 }
