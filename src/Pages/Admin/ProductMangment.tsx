@@ -1,20 +1,56 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import DeleteConfirmationPopup from '../../Component/shared/DeletPopup';
 import { FaPlus, FaEdit, FaTrash, FaSearch, FaImage } from 'react-icons/fa';
-import  {useGetDashboardProductsQuery}  from '../../store/Services/apiSclise';
+import  {useDeletdashboardproductsMutation, useGetDashboardProductsQuery}  from '../../store/Services/Products';
 
 const ProductManagement = () => {
   const [activeTab, setActiveTab] = useState('products');
   const [showAddModal, setShowAddModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
+  const [ApiProduct, setApiProduct] = useState([]);
+  const [itemidToDelete, setitemidToDelete] = useState<number>();
+  const [itemToDelete, setItemToDelete] = useState('');
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  
+  const {data, error, isLoading} = useGetDashboardProductsQuery()
+  useEffect(() => {
+    if (data?.data) {
+      setApiProduct(data.data);
+    }
+  }, [data]);
+ 
+  
+ 
+  const [destroy ,{isLoading: looad, isSuccess }] = useDeletdashboardproductsMutation()
 
-  const products = [
-    { id: 'P001', name: 'Wireless Headphones', category: 'Electronics', price: 129.99, stock: 45, rating: 4.5, image: "https://unsplash.com/photos/a-close-up-shot-of-a-black-espresso-machine-o_Yg86-pYmc" },
-    { id: 'P002', name: 'Smart Watch', category: 'Electronics', price: 299.99, stock: 23, rating: 4.7, image: 'https://unsplash.com/photos/a-person-wearing-black-headphones-PjDfgT1E2-c' },
-    { id: 'P003', name: 'Laptop Stand', category: 'Accessories', price: 49.99, stock: 67, rating: 4.3, image: ' https://unsplash.com/photos/a-single-book-is-resting-on-a-wooden-surface-JpQ-Xh1vE50' },
-    { id: 'P004', name: 'USB Cable', category: 'Accessories', price: 19.99, stock: 156, rating: 4.1, image: 'https://unsplash.com/photos/a-box-of-colored-pencils-is-sitting-on-a-wooden-table-eSJM_9l3D94' },
-  ];
+
+
+  const handleDeleteClick = (title: string , id: number) => {
+    setItemToDelete(title);
+    setitemidToDelete(id)
+ 
+    
+    setIsPopupOpen(true);
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+    setItemToDelete(''); // ممكن تمسح اسم العنصر لما الـ popup يتقفل
+  };
+
+  const handleConfirmDelete = () => {
+      destroy(itemidToDelete)
+    
+    console.log(`Deleting item: ${itemToDelete}`);
+    alert(`${itemToDelete} has been deleted! (This is a simulation)`);
+    // بعد الحذف، ممكن تعمل refresh للستة أو أي حاجة تانية
+  };
+  
+
+  const ApiUrl = import.meta.env.VITE_SERVER_URL;
+
+
 
   const categories = [
     { id: 'C001', name: 'Electronics', products: 156 },
@@ -24,24 +60,6 @@ const ProductManagement = () => {
   ];
 
 
-  const {data, error, isLoading} = useGetDashboardProductsQuery()
-  console.log(data.data)
-  const handleSelectProduct = (productId: string) => {
-    setSelectedProducts(prev => 
-      prev.includes(productId) 
-        ? prev.filter(id => id !== productId)
-        : [...prev, productId]
-    );
-  };
-
-  const handleSelectAll = () => {
-    setSelectedProducts(selectedProducts.length === products.length ? [] : products.map(p => p.id));
-  };
-
-  const handleBulkDelete = () => {
-    console.log('Bulk deleting products:', selectedProducts);
-    setSelectedProducts([]);
-  };
 
   const handleAddProduct = () => {
     setShowAddModal(true);
@@ -125,18 +143,7 @@ const ProductManagement = () => {
               </select>
             </div>
 
-            {selectedProducts.length > 0 && (
-              <div className="mt-4 flex items-center space-x-4">
-                <span className="text-sm text-gray-600">{selectedProducts.length} products selected</span>
-                <button
-                  onClick={handleBulkDelete}
-                  className="flex items-center space-x-2 bg-red-600 text-white px-3 py-1.5 rounded-lg hover:bg-red-700 transition-colors"
-                >
-                  <FaTrash className="w-3 h-3" />
-                  <span>Delete Selected</span>
-                </button>
-              </div>
-            )}
+            
           </div>
 
           {/* Products Table */}
@@ -145,14 +152,7 @@ const ProductManagement = () => {
               <table className="min-w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="text-left py-3 px-6">
-                      <input
-                        type="checkbox"
-                        checked={selectedProducts.length === products.length}
-                        onChange={handleSelectAll}
-                        className="rounded border-gray-300 text-primary focus:ring-primary"
-                      />
-                    </th>
+                    
                     <th className="text-left py-3 px-6 text-sm font-medium text-gray-600">Product</th>
                     <th className="text-left py-3 px-6 text-sm font-medium text-gray-600">Category</th>
                     <th className="text-left py-3 px-6 text-sm font-medium text-gray-600">Price</th>
@@ -162,48 +162,42 @@ const ProductManagement = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map((product) => (
-                    <tr key={product.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                      <td className="py-4 px-6">
-                        <input
-                          type="checkbox"
-                          checked={selectedProducts.includes(product.id)}
-                          onChange={() => handleSelectProduct(product.id)}
-                          className="rounded border-gray-300 text-primary focus:ring-primary"
-                        />
-                      </td>
+                  {ApiProduct.map(({id, documentId, title, description, price, stock, createdAt, updatedAt, publishedAt, thumbnail, categories}) => (
+                    <tr key={id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                     
                       <td className="py-4 px-6">
                         <div className="flex items-center space-x-3">
-                          <img src={product.image} alt={product.name} className="w-12 h-12 rounded-lg object-cover" />
+                          <img src={ApiUrl + thumbnail[0].url} alt={title} className="w-12 h-12 rounded-lg object-cover" />
                           <div>
-                            <p className="text-sm font-medium text-gray-900">{product.name}</p>
-                            <p className="text-xs text-gray-500">{product.id}</p>
+                            <p className="text-sm font-medium text-gray-900">{title}</p>
+                            
                           </div>
                         </div>
                       </td>
-                      <td className="py-4 px-6 text-sm text-gray-900">{product.category}</td>
-                      <td className="py-4 px-6 text-sm text-gray-900">${product.price}</td>
+                      <td className="py-4 px-6 text-sm text-gray-900">{categories[0].title}</td>
+                      <td className="py-4 px-6 text-sm text-gray-900">${price}</td>
                       <td className="py-4 px-6">
                         <span className={`px-2 py-1 text-xs rounded-full ${
-                          product.stock > 50 ? 'bg-green-100 text-green-800' :
-                          product.stock > 10 ? 'bg-yellow-100 text-yellow-800' :
+                          stock > 50 ? 'bg-green-100 text-green-800' :
+                          stock > 10 ? 'bg-yellow-100 text-yellow-800' :
                           'bg-red-100 text-red-800'
                         }`}>
-                          {product.stock}
+                          {stock}
                         </span>
                       </td>
-                      <td className="py-4 px-6 text-sm text-gray-900">⭐ {product.rating}</td>
+                      <td className="py-4 px-6 text-sm text-gray-900">⭐ </td>
                       <td className="py-4 px-6">
                         <div className="flex items-center space-x-2">
                           <button
-                            onClick={() => handleEditProduct(product.id)}
+                            onClick={() => handleEditProduct(id)}
                             className="p-2 text-gray-600 hover:text-primary hover:bg-primary-50 rounded-lg transition-colors"
                             title="Edit Product"
                           >
                             <FaEdit className="w-4 h-4" />
                           </button>
+                         
                           <button
-                            onClick={() => handleDeleteProduct(product.id)}
+                            onClick={() => handleDeleteClick(title,documentId)}
                             className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                             title="Delete Product"
                           >
@@ -213,6 +207,13 @@ const ProductManagement = () => {
                       </td>
                     </tr>
                   ))}
+                   <DeleteConfirmationPopup
+                          isOpen={isPopupOpen}
+                          onClose={handleClosePopup}
+                          onConfirm={handleConfirmDelete}
+                          title="Confirm Deletion of Item"
+                          message={` ${itemToDelete}`}
+                          itemName={itemToDelete}/>
                 </tbody>
               </table>
             </div>
