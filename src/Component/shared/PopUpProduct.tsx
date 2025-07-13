@@ -1,39 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { useForm } from 'react-hook-form';
 import { X, Upload, Package } from 'lucide-react';
+import {Category ,ProductFormData ,ExistingProductData ,ProductCreationPopupProps} from "../../interface/productsInterfaces"
 
-interface Category {
-  id: string;
-  name: string;
-}
-
-interface ProductFormData {
-  title: string;
-  stock: number;
-  price: number;
-  description: string;
-  thumbnail: FileList;
-  categories: string[];
-}
-
-interface ProductCreationPopupProps {
-  isOpen: boolean;
-  onClose?: () => void;
-  onSubmit?: (data: ProductFormData) => void;
-  categories: Category[];
-  isLoading?: boolean;
-}
 
 const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
   isOpen,
   onClose,
   onSubmit,
   categories,
-  isLoading = false
+  isLoading = false,
+  initialData 
 }) => {
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   
-  const { register, handleSubmit, formState: { errors }, reset, watch } = useForm<ProductFormData>({
+  const { register, handleSubmit, formState: { errors }, reset, watch,setValue  } = useForm<ProductFormData>({
     defaultValues: {
       title: '',
       stock: 0,
@@ -45,7 +26,37 @@ const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
 
   const watchedThumbnail = watch('thumbnail');
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (initialData) {
+      // بنعمل reset للفورم بالبيانات القديمة
+      reset({
+        title: initialData.title,
+        stock: initialData.stock,
+        price: initialData.price,
+        description: initialData.description,
+        categories: initialData.categories,
+      });
+      
+      if (initialData.thumbnailUrl) {
+        setThumbnailPreview(initialData.thumbnailUrl);
+      }
+     
+      
+    } else {
+     
+      reset({
+        title: '',
+        stock: 0,
+        price: 0,
+        description: '',
+        categories: []
+      });
+      setThumbnailPreview(null); 
+    }
+  }, [initialData, reset, setValue]);
+
+  
+  useEffect(() => {
     if (watchedThumbnail?.[0]) {
       const reader = new FileReader();
       reader.onload = (e) => setThumbnailPreview(e.target?.result as string);

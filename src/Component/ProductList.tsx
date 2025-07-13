@@ -4,17 +4,19 @@ import { useDeletdashboardproductsMutation, useGetDashboardProductsQuery } from 
 import DeleteConfirmationPopup from './shared/DeletPopup';
 import { ApiUrl } from '../api/axios.config';
 import ProductCreationPopup from './shared/PopUpProduct';
+import { ExistingProductData } from 'interface/productsInterfaces';
 
 
 function ProductList() {
-    const [activeTab, setActiveTab] = useState('products');
+   
     const[AddModal,setAddModal] =useState<boolean>(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [ApiProduct, setApiProduct] = useState([]);
     const [itemidToDelete, setitemidToDelete] = useState<number>();
     const [itemToDelete, setItemToDelete] = useState('');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    
+    const [selectedProductToEdit, setSelectedProductToEdit] = useState<ExistingProductData | null>(null);
+
     const {data, error, isLoading} = useGetDashboardProductsQuery()
     
     useEffect(() => {
@@ -33,9 +35,6 @@ function ProductList() {
 
    
     const [destroy ,{isLoading: looad, isSuccess }] = useDeletdashboardproductsMutation()
-  
-  
-  
     const handleDeleteClick = (title: string , documentId: number) => {
       setItemToDelete(title);
       setitemidToDelete(documentId)
@@ -60,12 +59,11 @@ function ProductList() {
   
   
   
-    const handleAddProduct = () => {
-      setShowAddModal(true);
-    };
-  
-    const handleEditProduct = (productId: string) => {
-      console.log('Editing product:', productId);
+    const handleEditProduct = (product:ExistingProductData) => {
+
+        setAddModal(true)
+      console.log(product);
+      
     };
   
     const handleDeleteProduct = (productId: string) => {
@@ -106,7 +104,7 @@ function ProductList() {
 
             
           </div>
-          {   <ProductCreationPopup isOpen={AddModal}   categories={categories} onClose={()=>setAddModal(false)} />}
+          {   <ProductCreationPopup isOpen={AddModal}   categories={categories} onClose={()=>setAddModal(false)} initialData={selectedProductToEdit || undefined}  />}
           {/* Products Table */}
           <div className="bg-white rounded-lg shadow-sm border">
             <div className="overflow-x-auto">
@@ -123,51 +121,51 @@ function ProductList() {
                   </tr>
                 </thead>
                 <tbody>
-                  {ApiProduct.map(({id, documentId, title, description, price, stock, createdAt, updatedAt, publishedAt, thumbnail, categories}) => (
-                    <tr key={id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                     
-                      <td className="py-4 px-6">
-                        <div className="flex items-center space-x-3">
-                          <img src={ApiUrl + thumbnail[0].url} alt={title} className="w-12 h-12 rounded-lg object-cover" />
-                          <div>
-                            <p className="text-sm font-medium text-gray-900">{title}</p>
+                  {ApiProduct.map((product) =>{
+                    const {id, documentId, title, description, price, stock, thumbnail, categories} = product; 
+                  
+                    return(<tr key={id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                        <td className="py-4 px-6">
+                            <div className="flex items-center space-x-3">
+                            <img src={ApiUrl + thumbnail[0].url} alt={title} className="w-12 h-12 rounded-lg object-cover" />
+                            <div>
+                                <p className="text-sm font-medium text-gray-900">{title}</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td className="py-4 px-6 text-sm text-gray-900">{categories[0].title}</td>
+                        <td className="py-4 px-6 text-sm text-gray-900">${price}</td>
+                        <td className="py-4 px-6">
+                            <span className={`px-2 py-1 text-xs rounded-full ${
+                            stock > 50 ? 'bg-green-100 text-green-800' :
+                            stock > 10 ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-red-100 text-red-800'
+                            }`}>
+                            {stock}
+                            </span>
+                        </td>
+                        <td className="py-4 px-6 text-sm text-gray-900">⭐ </td>
+                        <td className="py-4 px-6">
+                            <div className="flex items-center space-x-2">
+                            <button
+                                onClick={()=>handleEditProduct(product)}
+                                className="p-2 text-gray-600 hover:text-primary hover:bg-primary-50 rounded-lg transition-colors"
+                                title="Edit Product"
+                            >
+                                <FaEdit className="w-4 h-4" />
+                            </button>
                             
-                          </div>
-                        </div>
-                      </td>
-                      <td className="py-4 px-6 text-sm text-gray-900">{categories[0].title}</td>
-                      <td className="py-4 px-6 text-sm text-gray-900">${price}</td>
-                      <td className="py-4 px-6">
-                        <span className={`px-2 py-1 text-xs rounded-full ${
-                          stock > 50 ? 'bg-green-100 text-green-800' :
-                          stock > 10 ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
-                          {stock}
-                        </span>
-                      </td>
-                      <td className="py-4 px-6 text-sm text-gray-900">⭐ </td>
-                      <td className="py-4 px-6">
-                        <div className="flex items-center space-x-2">
-                          <button
-                            onClick={() => setAddModal(true)}
-                            className="p-2 text-gray-600 hover:text-primary hover:bg-primary-50 rounded-lg transition-colors"
-                            title="Edit Product"
-                          >
-                            <FaEdit className="w-4 h-4" />
-                          </button>
-                         
-                          <button
-                            onClick={() => handleDeleteClick(title,documentId)}
-                            className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Delete Product"
-                          >
-                            <FaTrash className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                            <button
+                                onClick={() => handleDeleteClick(title,documentId)}
+                                className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                title="Delete Product"
+                            >
+                                <FaTrash className="w-4 h-4" />
+                            </button>
+                            </div>
+                        </td>
+                        </tr>
+                    )})}
                    <DeleteConfirmationPopup
                           isOpen={isPopupOpen}
                           onClose={handleClosePopup}
