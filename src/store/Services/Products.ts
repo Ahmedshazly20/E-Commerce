@@ -25,7 +25,7 @@ export const Apislic = createApi({
           ? [...result.data.map(({ id }) => ({ type: 'Products' as const, id })), 'Products']
           : ['Products'],
                     
-    }),
+           }),
         deletdashboardproducts:build.mutation({
             query(documentId) {
                 return{
@@ -51,7 +51,28 @@ export const Apislic = createApi({
                 }
             },invalidatesTags: ['Products'],
 
-        })
+        }),
+        createdashboardproduct:build.mutation({
+            query({data}){
+                const token = CookieService.get("Jwt");
+                return{
+                    url:`/api/products/${documentId}`,
+                    method:"POST",
+                    headers:{Authorization: `Bearer ${token}`},
+                       
+                    body: {
+                        data: fields, 
+                      },
+                      
+                }
+            },invalidatesTags: ['Products'],
+
+        }),
+
+      
+
+
+
     })
 
 
