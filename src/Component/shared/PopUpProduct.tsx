@@ -2,7 +2,8 @@ import React, { useState ,useEffect} from 'react';
 import { useForm } from 'react-hook-form';
 import { X, Upload, Package } from 'lucide-react';
 import {Category ,ProductFormData ,ExistingProductData ,ProductCreationPopupProps} from "../../interface/productsInterfaces"
-
+import { useUpdatedashboardproductMutation } from '../../store/Services/Products';
+import CookieService from "../../Services/CreateServices"
 
 const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
   isOpen,
@@ -10,31 +11,34 @@ const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
   onSubmit,
   categories,
   isLoading = false,
+  submation,
   initialData 
 }) => {
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   
   const { register, handleSubmit, formState: { errors }, reset, watch,setValue  } = useForm<ProductFormData>({
     defaultValues: {
+      documentId:'',
       title: '',
       stock: 0,
       price: 0,
       description: '',
-      categories: []
+      
     }
   });
 
   const watchedThumbnail = watch('thumbnail');
+  const [updateProduct, { isLoading: isUpdating, isSuccess, isError }] = useUpdatedashboardproductMutation()
 
   useEffect(() => {
     if (initialData) {
-      // بنعمل reset للفورم بالبيانات القديمة
       reset({
         title: initialData.title,
         stock: initialData.stock,
         price: initialData.price,
+        documentId:initialData.documentId,
         description: initialData.description,
-        categories: initialData.categories,
+        
       });
       
       if (initialData.thumbnailUrl) {
@@ -45,16 +49,19 @@ const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
     } else {
      
       reset({
+        documentId:'',
         title: '',
         stock: 0,
         price: 0,
         description: '',
-        categories: []
+       
       });
       setThumbnailPreview(null); 
     }
   }, [initialData, reset, setValue]);
 
+
+  
   
   useEffect(() => {
     if (watchedThumbnail?.[0]) {
@@ -70,14 +77,33 @@ const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
     onClose();
   };
 
-  const onFormSubmit = (data: ProductFormData) => {
-    onSubmit(data);
+  const onFormSubmit =async (data: ProductFormData) => {
+    if (initialData) {
+      await updateProduct(
+        {
+          documentId: data.documentId,
+          title: data.title,
+          price: data.price,
+          stock: data.stock,
+          description: data.description,
+        }
+      );
+    }
   };
+ if(isUpdating){
+  console.log(isUpdating , "isUpdating");
+ }
+ if(isSuccess){
+  console.log(isSuccess , "isSuccess");
+ }
+ if(isError){
+  console.log(isError , "isError");
+ }
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div className="fixed inset-0 m-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
@@ -175,7 +201,7 @@ const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
           </div>
 
           {/* Categories */}
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Categories *</label>
             <div className="border rounded-md p-3 max-h-32 overflow-y-auto">
               {categories.length === 0 ? (
@@ -197,7 +223,7 @@ const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
               )}
             </div>
             {errors.categories && <p className="mt-1 text-sm text-red-600">{errors.categories.message}</p>}
-          </div>
+          </div> */}
 
           {/* Actions */}
           <div className="flex justify-end space-x-3 pt-4 border-t">
@@ -213,7 +239,7 @@ const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
               disabled={isLoading}
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'Creating...' : 'Create Product'}
+              {submation}
             </button>
           </div>
         </div>

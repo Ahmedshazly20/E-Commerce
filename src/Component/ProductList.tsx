@@ -43,36 +43,22 @@ function ProductList() {
   
     const handleClosePopup = () => {
       setIsPopupOpen(false);
-      setItemToDelete(''); 
-    };
+      setItemToDelete('');};
   
-    const handleConfirmDelete = () => {
-      destroy(itemidToDelete)
-      
-    };
-    
-  
-  
-  
-  
-   
-  
+    const handleConfirmDelete = () => {destroy(itemidToDelete)};
   
   
     const handleEditProduct = (product:ExistingProductData) => {
-
         setAddModal(true)
-      console.log(product);
-      
-    };
+        setSelectedProductToEdit(product);
+        console.log(selectedProductToEdit);};
   
-    const handleDeleteProduct = (productId: string) => {
-      console.log('Deleting product:', productId);
-    };
+    
   
 
   return (
     <div className="space-y-6">
+       {   <ProductCreationPopup isOpen={AddModal}   categories={categories} onClose={()=>setAddModal(false)} initialData={selectedProductToEdit || undefined} submation="Update product"  />}
           {/* Search and Filters */}
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
@@ -104,7 +90,6 @@ function ProductList() {
 
             
           </div>
-          {   <ProductCreationPopup isOpen={AddModal}   categories={categories} onClose={()=>setAddModal(false)} initialData={selectedProductToEdit || undefined}  />}
           {/* Products Table */}
           <div className="bg-white rounded-lg shadow-sm border">
             <div className="overflow-x-auto">
@@ -133,7 +118,7 @@ function ProductList() {
                             </div>
                             </div>
                         </td>
-                        <td className="py-4 px-6 text-sm text-gray-900">{categories[0].title}</td>
+                        <td className="py-4 px-6 text-sm text-gray-900">{"categories"}</td>
                         <td className="py-4 px-6 text-sm text-gray-900">${price}</td>
                         <td className="py-4 px-6">
                             <span className={`px-2 py-1 text-xs rounded-full ${

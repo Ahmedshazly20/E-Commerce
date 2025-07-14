@@ -6,11 +6,11 @@ export const Apislic = createApi({
     refetchOnMountOrArgChange:true,
     refetchOnReconnect:true,
     baseQuery:fetchBaseQuery({baseUrl:import.meta.env.VITE_SERVER_URL,
-        prepareHeaders: (headers, { getState }) => {
-            const token = CookieService.get("jwt"); // هات التوكن من الكوكيز
+        prepareHeaders: (headers) => {
+            const token = CookieService.get("Jwt"); // هات التوكن من الكوكيز
             if (token) {
-                headers.set("Authorization", `Bearer ${token}`); // ضيف التوكن في الـ Header
-            }
+                headers.set("Authorization", `Bearer ${token}`);
+              }
             return headers;
         },},
         ),
@@ -35,6 +35,22 @@ export const Apislic = createApi({
                 }}, invalidatesTags: ['Products'],
 
 
+        }),
+        updatedashboardproduct:build.mutation({
+            query({ documentId, ...fields }){
+                const token = CookieService.get("Jwt");
+                return{
+                    url:`/api/products/${documentId}`,
+                    method:"PUT",
+                    headers:{Authorization: `Bearer ${token}`},
+                       
+                    body: {
+                        data: fields, 
+                      },
+                      
+                }
+            },invalidatesTags: ['Products'],
+
         })
     })
 
@@ -42,4 +58,4 @@ export const Apislic = createApi({
    
 });
 
-export const {useGetDashboardProductsQuery,useDeletdashboardproductsMutation} = Apislic;
+export const {useGetDashboardProductsQuery,useDeletdashboardproductsMutation,useUpdatedashboardproductMutation} = Apislic;

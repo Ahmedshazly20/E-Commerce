@@ -4,6 +4,7 @@
   }
   
   export   interface ProductFormData {
+    documentId:string;
     title: string;
     stock: number;
     price: number;
@@ -12,7 +13,7 @@
     categories: string[];
   }
   
-  export   interface ExistingProductData {
+  export  interface ExistingProductData {
     id: string; 
     documentId:string;
     title: string;
@@ -29,6 +30,7 @@
     onSubmit?: (data: ProductFormData) => void;
     categories: Category[];
     initialData?: ExistingProductData;
+    submation:string;
     isLoading?: boolean;
   }
   
