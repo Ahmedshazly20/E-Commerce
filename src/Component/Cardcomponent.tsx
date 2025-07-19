@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MdAddShoppingCart } from "react-icons/md";
-import { Product } from '../interface/interface';
+import  Product  from '../interface/interface';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query'
 import  ProductSkeleton  from './ProductSkeleton';
@@ -54,8 +54,12 @@ export default function Cardcomponent() {
         <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
         <div className="relative group">
           <img
-              src={ ApiUrl + produc.thumbnail[0].url } 
-             alt={produc.title}
+                 src={
+                  produc.thumbnail?.[0]?.url // نتحقق إذا كان thumbnail موجود كـ array، ثم أول عنصر، ثم الـ url
+                    ? ApiUrl + produc.thumbnail[0].url
+                    : `${ApiUrl}/uploads/Gemini_Generated_Image_u5prrwu5prrwu5pr_913e06db1b.png` // صورة بديلة في حالة عدم وجود صورة
+                }
+                         alt={produc.title}
             className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
           />
           <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300" />

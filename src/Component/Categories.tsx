@@ -1,17 +1,24 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import {  FaEdit, FaTrash,  } from 'react-icons/fa';
-
+import {useGetDashboardcategoriesQuery} from '../store/Services/categories'
 function Categories() {
-    const categories = [
-        { id: 'C001', name: 'Electronics', products: 156 },
-        { id: 'C002', name: 'Accessories', products: 89 },
-        { id: 'C003', name: 'Clothing', products: 234 },
-        { id: 'C004', name: 'Home & Garden', products: 67 },
-      ];
+
+  const [Apicategories , setcategories]=useState([])
+  const {data , isLoading , isSuccess , isError} =useGetDashboardcategoriesQuery()
+
+ 
     
     
 
+      useEffect(() => {
+        if (data?.data) {
+          setcategories(data.data);
+        }
+      }, [data]);
+    
 
+     
+  
   return (
     <div className="space-y-6">
     {/* Categories Table */}
@@ -27,10 +34,10 @@ function Categories() {
             </tr>
           </thead>
           <tbody>
-            {categories.map((category) => (
+            {Apicategories.map((category) => (
               <tr key={category.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                 <td className="py-4 px-6 text-sm text-primary font-medium">{category.id}</td>
-                <td className="py-4 px-6 text-sm text-gray-900">{category.name}</td>
+                <td className="py-4 px-6 text-sm text-gray-900">{category.title}</td>
                 <td className="py-4 px-6 text-sm text-gray-900">{category.products}</td>
                 <td className="py-4 px-6">
                   <div className="flex items-center space-x-2">

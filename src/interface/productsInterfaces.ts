@@ -9,8 +9,8 @@
     stock: number;
     price: number;
     description: string;
-    thumbnail: FileList;
-    categories: string[];
+    thumbnail: FileList | null;
+    // categories: string[];
   }
   
   export  interface ExistingProductData {
@@ -20,15 +20,15 @@
     stock: number;
     price: number;
     description: string;
-    thumbnailUrl?: string; 
-    categories: string[];
+    thumbnail?: []; 
+    // categories: string[];
   }
   
   export   interface ProductCreationPopupProps {
     isOpen: boolean;
     onClose?: () => void;
     onSubmit?: (data: ProductFormData) => void;
-    categories: Category[];
+    // categories: Category[];
     initialData?: ExistingProductData;
     submation:string;
     isLoading?: boolean;

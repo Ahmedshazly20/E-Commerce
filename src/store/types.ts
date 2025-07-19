@@ -2,7 +2,8 @@ import { configureStore } from '@reduxjs/toolkit'
 import LoginSlice from './Featuers/LoginSlice'
 import cartSlice from './Featuers/CartSlice'
 import registerSlice from './Featuers/RegusterSlice'
-import  {Apislic}  from './Services/Products';
+import { Apislic } from './Services/Products'
+import { categories } from './Services/categories'
 
 export const store = configureStore({
   reducer: {
@@ -10,13 +11,13 @@ export const store = configureStore({
     register: registerSlice,
     cart: cartSlice,
     [Apislic.reducerPath]: Apislic.reducer,
-    
+    [categories.reducerPath]: categories.reducer
   },
   middleware: (getDefaultMiddleware) =>
-  getDefaultMiddleware().concat(Apislic.middleware)
+    getDefaultMiddleware()
+      .concat(Apislic.middleware)
+      .concat(categories.middleware)
 })
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof store.dispatch 
+export type AppDispatch = typeof store.dispatch

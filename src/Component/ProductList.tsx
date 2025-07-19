@@ -48,12 +48,19 @@ function ProductList() {
     const handleConfirmDelete = () => {destroy(itemidToDelete)};
   
   
-    const handleEditProduct = (product:ExistingProductData) => {
-        setAddModal(true)
-        setSelectedProductToEdit(product);
-        console.log(selectedProductToEdit);};
-  
-    
+    const handleEditProduct = (product: ExistingProductData) => {
+     console.log(product);
+     
+
+       const productWithThumbnailUrl = {
+         ...product,
+         thumbnailUrl: product.thumbnail && product.thumbnail.length > 0
+           ? ApiUrl + product.thumbnail[0].url
+           : null,
+      };
+       setSelectedProductToEdit(productWithThumbnailUrl); 
+      setAddModal(true);
+    };
   
 
   return (
@@ -118,7 +125,7 @@ function ProductList() {
                             </div>
                             </div>
                         </td>
-                        <td className="py-4 px-6 text-sm text-gray-900">{"categories"}</td>
+                        <td className="py-4 px-6 text-sm text-gray-900">{categories? categories[0]?.title : "categories"}</td>
                         <td className="py-4 px-6 text-sm text-gray-900">${price}</td>
                         <td className="py-4 px-6">
                             <span className={`px-2 py-1 text-xs rounded-full ${
