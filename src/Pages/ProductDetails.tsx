@@ -112,7 +112,7 @@ const ProductDetails = () => {
             <div className="aspect-square rounded-lg overflow-hidden bg-white">
               <img
                 
-                src={ ApiUrl + product.thumbnail[0].url } 
+                src={ product.thumbnail[0].url } 
                 alt={product.title}
                 className="w-full h-full object-cover"
               />

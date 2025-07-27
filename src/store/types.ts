@@ -4,11 +4,14 @@ import cartSlice from './Featuers/CartSlice'
 import registerSlice from './Featuers/RegusterSlice'
 import { Apislic } from './Services/Products'
 import { categories } from './Services/categories'
+import NetworkSlice  from './Featuers/Network'
+
 
 export const store = configureStore({
   reducer: {
     login: LoginSlice,
     register: registerSlice,
+    network: NetworkSlice,
     cart: cartSlice,
     [Apislic.reducerPath]: Apislic.reducer,
     [categories.reducerPath]: categories.reducer

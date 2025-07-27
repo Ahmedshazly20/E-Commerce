@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdAddShoppingCart } from "react-icons/md";
 import  Product  from '../interface/interface';
 import axios from 'axios';
@@ -17,6 +17,7 @@ export default function Cardcomponent() {
  
 
 
+
   const dispatch = useDispatch()
 
   
@@ -24,7 +25,9 @@ export default function Cardcomponent() {
     try {
       const res = await axios.get(`${ApiUrl}/api/products?populate=thumbnail&populate=categories`);
       console.log(res.data.data);
-      setProductlist(res.data.data);} catch (error) {
+      setProductlist(res.data.data);
+      console.log(Productlist[0].thumbnail,"asd");
+    } catch (error) {
       console.error("Failed to fetch products:", error);
     }
   };
@@ -46,19 +49,17 @@ export default function Cardcomponent() {
    
   
 
+
   
     return (
       <>
       {Productlist.length > 0 ? (
         Productlist.map((produc: Product) =>  (      
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+
+        <div key={produc.documentId} className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
         <div className="relative group">
           <img
-                 src={
-                  produc.thumbnail?.[0]?.url // نتحقق إذا كان thumbnail موجود كـ array، ثم أول عنصر، ثم الـ url
-                    ? ApiUrl + produc.thumbnail[0].url
-                    : `${ApiUrl}/uploads/Gemini_Generated_Image_u5prrwu5prrwu5pr_913e06db1b.png` // صورة بديلة في حالة عدم وجود صورة
-                }
+                 src={produc.thumbnail[0].url}
                          alt={produc.title}
             className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
           />

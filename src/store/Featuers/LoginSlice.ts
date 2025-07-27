@@ -46,7 +46,7 @@ const loginSlice = createSlice({
         state.loading = false;
         state.data = action.payload;
         const date = new Date();
-        const IN_DAYS= 5;
+        const IN_DAYS= 100;
         
         date.setTime(date.getTime() + IN_DAYS * 24 * 60 * 60 * 1000);
         const options = {path:"/", expires:date ,}
