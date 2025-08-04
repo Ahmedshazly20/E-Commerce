@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector , useDispatch } from "react-redux";
 import { RootState } from '../store/store';
-import CookieService from "../Services/CreateServices";
+//import CookieService from "../Services/CreateServices";
 import { FiShoppingCart, FiUser, FiMenu, FiX, FiHeart, FiSearch } from 'react-icons/fi';
 import NavDropDown from "./NavDropDown";
 
@@ -16,7 +16,7 @@ import NavDropDown from "./NavDropDown";
   ];
 
 
-const isAuthenticated = CookieService.get("Jwt");
+// const isAuthenticated = CookieService.get("Jwt");
 
 
 const Navbar = () => {

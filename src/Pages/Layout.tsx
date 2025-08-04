@@ -1,6 +1,7 @@
 import React,{ useEffect,useState }  from 'react';
 import Navbar from '../Component/Navbar'
 import { Outlet } from "react-router-dom";
+import Footer from './../Component/Footer';
 
 function Layout() {
 
@@ -11,9 +12,7 @@ function Layout() {
  
   <Outlet/>
 
-  <div>
-    footer 
-  </div>
+ <Footer/>
   </>
 
   )

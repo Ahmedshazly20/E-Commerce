@@ -13,6 +13,7 @@ import UserManagement from './../Pages/Admin/UsersPage';
 import ProductManagement from './../Pages/Admin/ProductMangment';
 import OrdersPage from "./../Pages/Admin/Orders";
 import CustomerSupport from "./../Pages/Admin/CustomerSupport";
+import Landing from './../Pages/Landing';
 
 const isAuthenticated = CookieService.get("Jwt");
 
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
       {
         path: "/",
         index: true,
-        element: <div>Hello world!</div>,
+        element: <Landing/>,
       },
       {
         path: "/products",

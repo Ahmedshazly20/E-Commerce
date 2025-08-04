@@ -8,6 +8,7 @@ module.exports = {
   theme: {
   	extend: {
   		colors: {
+           
   			sidebar: {
   				DEFAULT: 'hsl(var(--sidebar-background))',
   				foreground: 'hsl(var(--sidebar-foreground))',
@@ -19,6 +20,7 @@ module.exports = {
   				ring: 'hsl(var(--sidebar-ring))'
   			}
   		}
+		
   	}
   },
   plugins: [require("tailwindcss-animate")],

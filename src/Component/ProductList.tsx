@@ -119,7 +119,7 @@ function ProductList() {
                     return(<tr key={id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                         <td className="py-4 px-6">
                             <div className="flex items-center space-x-3">
-                            <img src={thumbnail? ApiUrl + thumbnail[0].url  : "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1099&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt={title} className="w-12 h-12 rounded-lg object-cover" />
+                            <img src={ thumbnail[0].url } alt={title} className="w-12 h-12 rounded-lg object-cover" />
                             <div>
                                 <p className="text-sm font-medium text-gray-900">{title}</p>
                             </div>

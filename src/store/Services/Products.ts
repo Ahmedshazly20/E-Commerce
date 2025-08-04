@@ -37,19 +37,12 @@ export const Apislic = createApi({
 
         }),
         updateDashboardProducts: build.mutation({
-          // هنا بنستقبل الـ productData (البيانات العادية) والـ imageFile (الصورة الجديدة)
-          // وكمان الـ removeThumbnailFlag لو عايزين نمسح الصورة
           async queryFn({ documentId, productData, imageFile, removeThumbnailFlag }, _queryApi, _extraOptions, fetchWithBQ) {
             try {
               let finalThumbnailId = null;
 
-              // 1. معالجة الصورة:
-              //    - لو فيه صورة جديدة، نرفعها وناخد الـ ID بتاعها
-              //    - لو المستخدم مسح الصورة القديمة (removeThumbnailFlag == true)، يبقى الـ thumbnail هيكون null
-              //    - لو مفيش صورة جديدة ومفيش flag للمسح، يبقى هنفضل محتفظين بالصورة القديمة (مش هنبعت الـ thumbnail field خالص في الـ payload)
 
               if (imageFile) {
-                // فيه صورة جديدة هتترفع
                 const formData = new FormData();
                 formData.append("files", imageFile);
                 formData.append("ref", "api::product.product"); // الموديل UID بتاع Product
@@ -67,22 +60,15 @@ export const Apislic = createApi({
                 if (uploadRes.error) return { error: uploadRes.error };
                 finalThumbnailId = uploadRes.data?.[0]?.id; // هناخد الـ ID بتاع الصورة المرفوعة
               } else if (removeThumbnailFlag) {
-                finalThumbnailId = null; // هنبعت null لـ Strapi عشان يمسح الصورة
+                finalThumbnailId = null; 
               }
-              // لو مفيش imageFile ومفيش removeThumbnailFlag، يبقى finalThumbnailId هيفضل null
-              // وده معناه إننا مش هنبعت الـ thumbnail field في الـ payload عشان Strapi يحافظ على الصورة القديمة.
 
-              // 2. تجهيز بيانات التحديث (بما فيهم الـ thumbnail ID الجديد/المحذوف)
-              const payload: any = { ...productData }; // البيانات الأساسية (title, price, description, stock)
+              const payload: any = { ...productData }; 
 
-              // بنضيف الـ thumbnail للـ payload بس لو فيه تحديث ليه (صورة جديدة أو مسح)
               if (imageFile || removeThumbnailFlag) {
                 payload.thumbnail = finalThumbnailId;
               }
-              // لو مفيش صورة جديدة ولا طلب مسح، مش هنضيف الـ thumbnail للـ payload
-              // وده معناه إن Strapi هيحتفظ بالصورة اللي كانت موجودة قبل كده.
 
-              // 3. إرسال طلب التحديث لباقي بيانات المنتج
               const updateRes = await fetchWithBQ({
                 url: `/api/products/${documentId}`,
                 method: "PUT",

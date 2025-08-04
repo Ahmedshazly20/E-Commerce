@@ -27,7 +27,21 @@ export const categories = createApi({
                 
        }),
       
+       deleteDashboardcategories:build.mutation({
+        query:(documentId)=>{
+            return {url:`/api/categories/${documentId}`,
+                    method:"DELETE",}
+                 },invalidatesTags: ['categories'],}),
 
+       UpdateDashboardcategories:build.mutation({
+        query:({documentId,data })=>{
+            return {url:`/api/categories/${documentId}`,
+                    method:"PUT",
+                     headers: {Authorization: `Bearer ${CookieService.get("Jwt")}`,
+                              "Content-Type": "application/json",},
+                     body:{ data }
+                }
+                 },invalidatesTags: ['categories'],})          
 
 
     })
@@ -36,4 +50,4 @@ export const categories = createApi({
    
 });
 
-export const {useGetDashboardcategoriesQuery} = categories;
+export const {useGetDashboardcategoriesQuery,useDeleteDashboardcategoriesMutation,useUpdateDashboardcategoriesMutation} = categories;

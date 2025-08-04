@@ -4,7 +4,7 @@ import { FiTrash2, FiPlus, FiMinus, FiShoppingCart, FiArrowRight } from 'react-i
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
-import { imgReturn, titleclise } from '../utils/Functions';
+import {  titleclise } from '../utils/Functions';
 import { useDispatch } from 'react-redux';
 import { clearcart,decreaseQuantity ,increaseQuantity,removeFromCart } from '../store/Featuers/CartSlice';
 
@@ -41,8 +41,8 @@ const Cart = () => {
 
 
 
-  const totalPrice = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = cartItemCount.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const totalItems = cartItemCount.reduce((sum, item) => sum + item.quantity, 0);
 
   if (cartItemCount.length === 0) {
     return (
@@ -89,7 +89,7 @@ const Cart = () => {
               </div>
               
               <div className="divide-y divide-gray-200">
-                { cartItemCount.map(({id, documentId, description,price,thumbnail,categories,title,quantity}) => (
+                {cartItemCount.map(({id, documentId, description,price,thumbnail,categories,title,quantity}) => (
                   <div
                     key={id}
                     className="p-6 animate-fade-in"
@@ -98,13 +98,13 @@ const Cart = () => {
                     
                     <div className="flex items-center gap-4">
                       <img
-                        src={imgReturn(thumbnail.url)}
+                        src={thumbnail[0].url}
                         alt={title}
                         className="w-20 h-20 object-cover rounded-lg"
                       />
                       <div className="flex-1">
                         <h3 className="font-semibold text-base text-slate-600 cursor-pointer hover:text-cyan-600 mb-1">{titleclise(title)}</h3>
-                        <p className="text-primary font-semibold  text-green-600">${price.toFixed(2)}</p>
+                        <p className="text-primary font-semibold  text-green-600">${price.toFixed(2) * quantity }</p>
                       </div>
                       
                       <div className="flex items-center gap-3">

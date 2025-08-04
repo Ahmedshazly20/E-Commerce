@@ -1,12 +1,23 @@
 import React,{useEffect,useState} from 'react'
 import {  FaEdit, FaTrash,  } from 'react-icons/fa';
-import {useGetDashboardcategoriesQuery} from '../store/Services/categories'
+import {useGetDashboardcategoriesQuery,useDeleteDashboardcategoriesMutation} from '../store/Services/categories'
+import DeleteConfirmationPopup from './shared/DeletPopup';
+import PopUpCategoraise from './CategoraisePopUp';
+
+
 function Categories() {
 
-  const [Apicategories , setcategories]=useState([])
-  const {data , isLoading , isSuccess , isError} =useGetDashboardcategoriesQuery()
+    const [itemidToDelete, setitemidToDelete] = useState<number>();
+    const [itemToDelete, setItemToDelete] = useState('');
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const[AddModal,setAddModal] =useState<boolean>(false);
+    const [CategoriesToEdit , setCategoriesToEdit]=useState([])
+    const [Apicategories , setcategories]=useState([])
 
- 
+  const {data , isLoading , isSuccess  , isError} =useGetDashboardcategoriesQuery()
+
+  const [destroy ,{isLoading: looad,  }]=useDeleteDashboardcategoriesMutation()
+    
     
     
 
@@ -15,12 +26,28 @@ function Categories() {
           setcategories(data.data);
         }
       }, [data]);
-    
+
+     const handleClosePopup = () => {
+      setIsPopupOpen(false);
+      setItemToDelete('');};
+
+     const handleEditProduct = (Categories) => {
+       setAddModal(true)
+       setCategoriesToEdit(Categories)
+     }
+
+     const handleDeleteClick = (title: string , documentId: number) => {
+      setItemToDelete(title);
+      setitemidToDelete(documentId)
+      setIsPopupOpen(true);
+    };
+    const handleConfirmDelete = () => {destroy(itemidToDelete)};
 
      
   
   return (
     <div className="space-y-6">
+      <PopUpCategoraise isOpen={AddModal} onClose={()=>setAddModal(false)}  submation="Update Categories" initdata={CategoriesToEdit} />
     {/* Categories Table */}
     <div className="bg-white rounded-lg shadow-sm border">
       <div className="overflow-x-auto">
@@ -42,9 +69,9 @@ function Categories() {
                 <td className="py-4 px-6">
                   <div className="flex items-center space-x-2">
                     <button className="p-2 text-gray-600 hover:text-primary hover:bg-primary-50 rounded-lg transition-colors">
-                      <FaEdit className="w-4 h-4" />
+                      <FaEdit className="w-4 h-4" onClick={()=>handleEditProduct(category)} />
                     </button>
-                    <button className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                    <button  onClick={() => handleDeleteClick(category.title,category.documentId)} className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                       <FaTrash className="w-4 h-4" />
                     </button>
                   </div>
@@ -52,6 +79,13 @@ function Categories() {
               </tr>
             ))}
           </tbody>
+          <DeleteConfirmationPopup
+                          isOpen={isPopupOpen}
+                          onClose={handleClosePopup}
+                          onConfirm={handleConfirmDelete}
+                          title="Confirm Deletion of category Item"
+                          message={` ${itemToDelete}`}
+                          itemName={itemToDelete}/>
         </table>
       </div>
     </div>
