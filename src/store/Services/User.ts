@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import CookieService from "../../Services/CreateServices"
-export const categories = createApi({
-    reducerPath:"categoriesApi",
-    tagTypes: ["categories"],
+export const Users = createApi({
+    reducerPath:"UsersApi",
+    tagTypes: ["Users"],
     refetchOnMountOrArgChange:true,
     refetchOnReconnect:true,
     baseQuery:fetchBaseQuery({baseUrl:import.meta.env.VITE_SERVER_URL,
@@ -17,40 +17,40 @@ export const categories = createApi({
 
 
     endpoints:(build)=>({
-        getDashboardcategories: build.query({
+        getDashboardUsers: build.query({
             query: () => {
-              return {url: `/api/categories`};},
+              return {url: `/api/Users`};},
               providesTags: (result, error, arg) =>
            result
-      ? [...result.data.map(({ id }) => ({ type: 'categories' as const, id })), 'categories']
-      : ['categories'],
+      ? [...result.data.map(({ id }) => ({ type: 'Users' as const, id })), 'Users']
+      : ['Users'],
                 
        }),
       
-       deleteDashboardcategories:build.mutation({
+       deleteDashboardUsers:build.mutation({
         query:(documentId)=>{
-            return {url:`/api/categories/${documentId}`,
+            return {url:`/api/Users/${documentId}`,
                     method:"DELETE",}
-                 },invalidatesTags: ['categories'],}),
+                 },invalidatesTags: ['Users'],}),
 
-       UpdateDashboardcategories:build.mutation({
+       UpdateDashboardUsers:build.mutation({
         query:({documentId,data })=>{
-            return {url:`/api/categories/${documentId}`,
+            return {url:`/api/Users/${documentId}`,
                     method:"PUT",
                      body: { data }
                 }
-                 },invalidatesTags: ['categories'],}), 
+                 },invalidatesTags: ['Users'],}), 
        
 
-       AddDashboardcategories:build.mutation({
+       AddDashboardUsers:build.mutation({
         query:({data })=>{
-            return {url:`/api/categories/`,
+            return {url:`/api/Users/`,
                     method:"POST",
                      headers: {Authorization: `Bearer ${CookieService.get("Jwt")}`,
                               "Content-Type": "application/json",},
                      body: { data },
                 }
-                 },invalidatesTags: ['categories'],})           
+                 },invalidatesTags: ['Users'],})           
 
 
     })
@@ -59,4 +59,4 @@ export const categories = createApi({
    
 });
 
-export const {useGetDashboardcategoriesQuery,useAddDashboardcategoriesMutation,useDeleteDashboardcategoriesMutation,useUpdateDashboardcategoriesMutation} = categories;
+export const {useGetDashboardUsersQuery,useAddDashboardUsersMutation,useDeleteDashboardUsersMutation,useUpdateDashboardUsersMutation} = Users;

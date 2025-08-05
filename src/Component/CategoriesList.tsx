@@ -1,8 +1,9 @@
 import React,{useEffect,useState} from 'react'
-import {  FaEdit, FaTrash,  } from 'react-icons/fa';
+import {  FaEdit, FaPlus, FaTrash,  } from 'react-icons/fa';
 import {useGetDashboardcategoriesQuery,useDeleteDashboardcategoriesMutation} from '../store/Services/categories'
 import DeleteConfirmationPopup from './shared/DeletPopup';
 import PopUpCategoraise from './CategoraisePopUp';
+import { toast } from 'react-toastify';
 
 
 function Categories() {
@@ -13,12 +14,17 @@ function Categories() {
     const[AddModal,setAddModal] =useState<boolean>(false);
     const [CategoriesToEdit , setCategoriesToEdit]=useState([])
     const [Apicategories , setcategories]=useState([])
+    const [submation,setsubmation]=useState<string>("Update Categories")
 
-  const {data , isLoading , isSuccess  , isError} =useGetDashboardcategoriesQuery()
+  const {data  , isSuccess  , isError} =useGetDashboardcategoriesQuery()
 
-  const [destroy ,{isLoading: looad,  }]=useDeleteDashboardcategoriesMutation()
-    
-    
+  const [destroy ,{isLoading: looad,isSuccess:deleteisSuccess  }]=useDeleteDashboardcategoriesMutation()
+     
+     useEffect(() => {
+        if (deleteisSuccess) {
+           toast.success(`✅ Category Delete successfully`);
+        }
+      }, [deleteisSuccess]);
     
 
       useEffect(() => {
@@ -32,9 +38,17 @@ function Categories() {
       setItemToDelete('');};
 
      const handleEditProduct = (Categories) => {
+      setsubmation("Edit  Categories")
        setAddModal(true)
        setCategoriesToEdit(Categories)
      }
+     const handleAddProduct =()=>{
+      setAddModal(true)
+      setsubmation("Add new Categories")
+
+     }
+
+     //
 
      const handleDeleteClick = (title: string , documentId: number) => {
       setItemToDelete(title);
@@ -47,10 +61,20 @@ function Categories() {
   
   return (
     <div className="space-y-6">
-      <PopUpCategoraise isOpen={AddModal} onClose={()=>setAddModal(false)}  submation="Update Categories" initdata={CategoriesToEdit} />
+      <PopUpCategoraise isOpen={AddModal} onClose={()=>setAddModal(false)}  submission={submation} initialData={CategoriesToEdit} />
     {/* Categories Table */}
     <div className="bg-white rounded-lg shadow-sm border">
       <div className="overflow-x-auto">
+        <div className='p-1 flex items-end justify-end m-3 '>
+                 <button
+                    onClick={handleAddProduct}
+                    className="flex items-center space-x-2 bg-primary border-2 border-solid px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors">
+                    <FaPlus className="w-4 h-4" />
+                    <span>Add Categories</span>
+                  </button>
+           
+                 
+          </div>
         <table className="min-w-full">
           <thead className="bg-gray-50">
             <tr>

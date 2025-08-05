@@ -4,7 +4,7 @@ import ProductCreationPopup from '../../Component/shared/PopUpProduct'
 import { FaPlus } from 'react-icons/fa';
 import  {useDeletdashboardproductsMutation, useGetDashboardProductsQuery}  from '../../store/Services/Products';
 import ProductList from '../../Component/ProductList';
-import Categories from '../../Component/Categories';
+import Categories from '../../Component/CategoriesList';
 
 const ProductManagement = () => {
   const [activeTab, setActiveTab] = useState('products');

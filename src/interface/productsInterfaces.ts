@@ -30,7 +30,7 @@
     onSubmit?: (data: ProductFormData) => void;
     // categories: Category[];
     initialData?: ExistingProductData;
-    submation:string;
+    submission:string;
     isLoading?: boolean;
   }
   

@@ -1,32 +1,68 @@
-import React, { useState, useEffect } from 'react';
+import React , { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { X, Package } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { useUpdateDashboardcategoriesMutation,useAddDashboardcategoriesMutation } from '../store/Services/categories';
+import {  ProductCreationPopupProps } from "../interface/productsInterfaces";
 
-import { ProductFormData, ProductCreationPopupProps } from "../../interface/productsInterfaces";
+const PopUpCategoraise: React.FC<ProductCreationPopupProps> = ({ isOpen, onClose, submission,initialData}) => {
+  
 
-const PopUpCategoraise: React.FC<ProductCreationPopupProps> = ({ isOpen, onClose, submation,initdata}) => {
-  const { register, handleSubmit, formState: { errors },reset} = useForm<ProductFormData>();
+const [updateCategory, { isLoading: isUpdating, isSuccess, isError }] = useUpdateDashboardcategoriesMutation();
+const [createCategory, { isLoading: isCreating, isSuccess: isCreateSuccess, isError: isCreateError }] = useAddDashboardcategoriesMutation();
+
+
+
+  const { register, handleSubmit, formState: { errors },reset} = useForm();
 
    useEffect(() => {
     
-    reset({categories:initdata.title})}
+    reset({title:initialData.title,
+          documentId:initialData.documentId})}
     
-    ,[initdata])
+    ,[initialData]);
 
-   
+    useEffect(() => {
+       if (isSuccess) {
+         toast.success(`✅ Category updated successfully`);
+         handleClose();
+       }
+       if (isError) {
+         toast.error(`❌ Category Fild  to  update `);
+        
+       }
+       if(isCreateSuccess){
+        toast.success(`✅ Category created successfully`);
+        handleClose()
+       }
+       if(isCreateError){
+        toast.error(`❌ Category Fild  to  create `);
+        
+       }
+     }, [isSuccess, isError,isCreateSuccess,isCreateError]);
 
    const handleClose = () => {
-    reset();
+    reset({categories:""});
     onClose();
   };
 
 
- const onFormSubmit = async (data:any) => {
-     console.log(data);
-     
-    };
+ const onFormSubmit = async (formData) => {
+const isEdit = initialData && Object.keys(initialData).length > 0;
 
+  if (isEdit) {
+    updateCategory({
+      documentId: formData.documentId,
+      data: { title: formData.title },
+    });
+  } else {
+    createCategory({
+      data: { title: formData.title },
+    });
+  }
+        
+
+    };
 
 
   if (!isOpen) return null;
@@ -48,7 +84,7 @@ const PopUpCategoraise: React.FC<ProductCreationPopupProps> = ({ isOpen, onClose
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">categories Title *</label>
             <input
-              {...register('categories', { required: 'categories is required' })}
+              {...register('title', { required: 'categories is required' })}
               className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 errors.title ? 'border-red-500' : 'border-gray-300'
               }`}
@@ -75,7 +111,7 @@ const PopUpCategoraise: React.FC<ProductCreationPopupProps> = ({ isOpen, onClose
               // disabled={currentLoading}
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {submation}
+              {submission }
             </button>
           </div>
         </div>
