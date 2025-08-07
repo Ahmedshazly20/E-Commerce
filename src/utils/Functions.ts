@@ -21,6 +21,11 @@ export function titlDrowereclise( text:string , max : number = 45){
     return text;
 }
 
+export function UserId( text:string , max : number = 10){
+    if(text.length >= 20  )return `${text.slice(0, max)}...`;
+    else
+    return text;
+}
 
 //img return fun
 

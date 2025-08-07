@@ -1,9 +1,9 @@
 import React,{useState,useEffect} from 'react'
 import {  FaEdit, FaTrash, FaSearch,  } from 'react-icons/fa';
-import { useDeletdashboardproductsMutation, useGetDashboardProductsQuery } from '../store/Services/Products';
-import DeleteConfirmationPopup from './shared/DeletPopup';
-import { ApiUrl } from '../api/axios.config';
-import ProductCreationPopup from './shared/PopUpProduct';
+import { useDeletdashboardproductsMutation, useGetDashboardProductsQuery } from '../../store/Services/Products';
+import DeleteConfirmationPopup from '../shared/DeletPopup';
+import { ApiUrl } from '../../api/axios.config';
+import ProductCreationPopup from '../shared/PopUpProduct';
 import { ExistingProductData } from 'interface/productsInterfaces';
 
 

@@ -3,8 +3,8 @@ import React, {  useState } from 'react';
 import ProductCreationPopup from '../../Component/shared/PopUpProduct'
 import { FaPlus } from 'react-icons/fa';
 import  {useDeletdashboardproductsMutation, useGetDashboardProductsQuery}  from '../../store/Services/Products';
-import ProductList from '../../Component/ProductList';
-import Categories from '../../Component/CategoriesList';
+import ProductList from '../../Component/ActiveTaps/ProductList';
+import Categories from '../../Component/ActiveTaps/CategoriesList';
 
 const ProductManagement = () => {
   const [activeTab, setActiveTab] = useState('products');

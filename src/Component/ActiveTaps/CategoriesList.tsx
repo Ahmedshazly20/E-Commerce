@@ -1,8 +1,8 @@
 import React,{useEffect,useState} from 'react'
 import {  FaEdit, FaPlus, FaTrash,  } from 'react-icons/fa';
-import {useGetDashboardcategoriesQuery,useDeleteDashboardcategoriesMutation} from '../store/Services/categories'
-import DeleteConfirmationPopup from './shared/DeletPopup';
-import PopUpCategoraise from './CategoraisePopUp';
+import {useGetDashboardcategoriesQuery,useDeleteDashboardcategoriesMutation} from '../../store/Services/categories'
+import DeleteConfirmationPopup from '../shared/DeletPopup';
+import PopUpCategoraise from '../CategoraisePopUp';
 import { toast } from 'react-toastify';
 
 
