@@ -14,6 +14,8 @@ import ProductManagement from './../Pages/Admin/ProductMangment';
 import OrdersPage from "./../Pages/Admin/Orders";
 import CustomerSupport from "./../Pages/Admin/CustomerSupport";
 import Landing from './../Pages/Landing';
+import Aboutus from "./../Pages/Aboutus";
+import UserProfile from './../Pages/Profile';
 
 const isAuthenticated = CookieService.get("Jwt");
 
@@ -40,10 +42,22 @@ const router = createBrowserRouter([
         element: <Cart />,
       },
       {
+        path: "/AboutUs",
+        element: <Aboutus />,
+      },
+      {
         path: "/Contact",
         element: (
           <ProtectedRoute isAuthenticated={isAuthenticated}>
             <Contact />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/MyProfile",
+        element: (
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <UserProfile />
           </ProtectedRoute>
         ),
       },

@@ -10,7 +10,7 @@ import NavDropDown from "./NavDropDown";
   const navItems = [
     { name: 'Home', path: '/' },
     { name: 'Products', path: '/products' },
-    { name: 'About', path: '/about' },
+    { name: 'About', path: '/AboutUs' },
     { name: 'Contact', path: '/contact' }
    
   ];

@@ -8,7 +8,7 @@ const Footer = () => {
 
   const footerLinks = {
     company: [
-      { name: 'About Us', path: '/about' },
+      { name: 'About Us', path: '/AboutUs' },
       { name: 'Contact', path: '/contact' },
       { name: 'Careers', path: '#' },
       { name: 'Press', path: '#' }
