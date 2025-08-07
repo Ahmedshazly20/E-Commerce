@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import CookieService from "../../Services/CreateServices"
 export const Users = createApi({
-    reducerPath:"UsersApi",
-    tagTypes: ["Users"],
+    reducerPath:"users",
+    tagTypes: ["users"],
     refetchOnMountOrArgChange:true,
     refetchOnReconnect:true,
     baseQuery:fetchBaseQuery({baseUrl:import.meta.env.VITE_SERVER_URL,
@@ -19,23 +19,23 @@ export const Users = createApi({
     endpoints:(build)=>({
         getDashboardUsers: build.query({
             query: () => {
-              return {url: `/api/Users`};},
+              return {url: `/api/users`};},
               providesTags: (result, error, arg) =>
-           result
-      ? [...result.data.map(({ id }) => ({ type: 'Users' as const, id })), 'Users']
-      : ['Users'],
+           result?.data
+      ? [...result.data.map(({ id }) => ({ type: 'users' as const, id })),  { type: 'users', id: 'LIST' },]: [{ type: 'users', id: 'LIST' }],
+      
                 
        }),
       
        deleteDashboardUsers:build.mutation({
         query:(documentId)=>{
-            return {url:`/api/Users/${documentId}`,
+            return {url:`/api/users/${documentId}`,
                     method:"DELETE",}
                  },invalidatesTags: ['Users'],}),
 
        UpdateDashboardUsers:build.mutation({
         query:({documentId,data })=>{
-            return {url:`/api/Users/${documentId}`,
+            return {url:`/api/users/${documentId}`,
                     method:"PUT",
                      body: { data }
                 }
@@ -44,7 +44,7 @@ export const Users = createApi({
 
        AddDashboardUsers:build.mutation({
         query:({data })=>{
-            return {url:`/api/Users/`,
+            return {url:`/api/users/`,
                     method:"POST",
                      headers: {Authorization: `Bearer ${CookieService.get("Jwt")}`,
                               "Content-Type": "application/json",},

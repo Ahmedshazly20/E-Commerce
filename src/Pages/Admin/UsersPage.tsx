@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaUser, FaUserShield, FaEdit, FaTrash, FaSearch, FaBan, FaPlus } from 'react-icons/fa';
-
+import { useGetDashboardUsersQuery } from '../../store/Services/Users';
 
  const UserManagement = () => {
   const [activeTab, setActiveTab] = useState('customers');
   const [searchTerm, setSearchTerm] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [user,setuser]=useState([])
+
+   const {data ,isFetching ,isSuccess}= useGetDashboardUsersQuery()
+    
+   
+
 
   const customers = [
     { id: 'U001', name: 'John Doe', email: 'john@example.com', phone: '+1234567890', orders: 15, registered: '2023-01-15' },
@@ -39,6 +45,10 @@ import { FaUser, FaUserShield, FaEdit, FaTrash, FaSearch, FaBan, FaPlus } from '
   const handleAddAdmin = () => {
     setShowAddModal(true);
   };
+
+
+
+ 
 
   return (
     <div className="p-6 space-y-6">

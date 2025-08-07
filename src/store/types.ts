@@ -4,6 +4,7 @@ import cartSlice from './Featuers/CartSlice'
 import registerSlice from './Featuers/RegusterSlice'
 import { Apislic } from './Services/Products'
 import { categories } from './Services/categories'
+import {Users} from './Services/Users'
 import NetworkSlice  from './Featuers/Network'
 
 
@@ -14,10 +15,12 @@ export const store = configureStore({
     network: NetworkSlice,
     cart: cartSlice,
     [Apislic.reducerPath]: Apislic.reducer,
-    [categories.reducerPath]: categories.reducer
+    [categories.reducerPath]: categories.reducer,
+    [Users.reducerPath]: Users.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
+     .concat(Users.middleware)
       .concat(Apislic.middleware)
       .concat(categories.middleware)
 })
