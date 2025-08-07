@@ -4,6 +4,7 @@ import { Trash2, AlertTriangle, X } from 'lucide-react';
 interface DeleteConfirmationPopupProps {
   isOpen: boolean;
   onClose: () => void;
+  action?:string;
   onConfirm: () => void;
   title?: string;
   message?: string | number;
@@ -12,6 +13,7 @@ interface DeleteConfirmationPopupProps {
 const DeleteConfirmationPopup: React.FC<DeleteConfirmationPopupProps> = ({
   isOpen,
   onClose,
+  action = "delete",
   onConfirm,
   title = "Confirm Delete",
   message = "Are you sure you want to delete this item?",
@@ -72,7 +74,7 @@ const DeleteConfirmationPopup: React.FC<DeleteConfirmationPopupProps> = ({
             className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium flex items-center space-x-2"
           >
             <Trash2 className="w-4 h-4" />
-            <span>Delete</span>
+            <span>{action}</span>
           </button>
         </div>
       </div>

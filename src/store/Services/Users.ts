@@ -31,7 +31,7 @@ export const Users = createApi({
         query:(documentId)=>{
             return {url:`/api/users/${documentId}`,
                     method:"DELETE",}
-                 },invalidatesTags: ['Users'],}),
+                 },invalidatesTags: ['users'],}),
 
        UpdateDashboardUsers:build.mutation({
         query:({documentId,data })=>{
@@ -39,7 +39,7 @@ export const Users = createApi({
                     method:"PUT",
                      body: { data }
                 }
-                 },invalidatesTags: ['Users'],}), 
+                 },invalidatesTags: ['users'],}), 
        
 
        AddDashboardUsers:build.mutation({
@@ -50,7 +50,7 @@ export const Users = createApi({
                               "Content-Type": "application/json",},
                      body: { data },
                 }
-                 },invalidatesTags: ['Users'],})           
+                 },invalidatesTags: ['users'],})           
 
 
     })
