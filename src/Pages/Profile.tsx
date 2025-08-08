@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   FiUser,
@@ -53,7 +52,7 @@ const UserProfile: React.FC = () => {
 
   // Mock data
   const [userData, setUserData] = useState<UserData>({
-    name: 'أحمد محمد',
+    name: 'Ahmed Mohammed',
     email: 'ahmed@example.com',
     phone: '+966501234567',
     phoneVerified: false
@@ -65,24 +64,24 @@ const UserProfile: React.FC = () => {
   ]);
 
   const [addresses] = useState<Address[]>([
-    { id: 1, type: 'منزل', address: 'شارع الملك فهد، حي الملز', city: 'الرياض', isDefault: true },
-    { id: 2, type: 'عمل', address: 'طريق الملك عبدالعزيز، حي العليا', city: 'الرياض', isDefault: false }
+    { id: 1, type: 'Home', address: 'King Fahd Road, Al Malaz District', city: 'Riyadh', isDefault: true },
+    { id: 2, type: 'Work', address: 'King Abdulaziz Road, Al Olaya District', city: 'Riyadh', isDefault: false }
   ]);
 
   const [orderHistory] = useState<Order[]>([
     {
       id: '#12345',
       date: '2024-01-15',
-      status: 'تم التسليم',
+      status: 'Delivered',
       total: 299.99,
-      items: ['لابتوب Dell XPS', 'ماوس لاسلكي']
+      items: ['Dell XPS Laptop', 'Wireless Mouse']
     },
     {
       id: '#12344',
       date: '2024-01-10',
-      status: 'تم التسليم',
+      status: 'Delivered',
       total: 89.99,
-      items: ['سماعات بلوتوث']
+      items: ['Bluetooth Headphones']
     }
   ]);
 
@@ -90,19 +89,19 @@ const UserProfile: React.FC = () => {
     {
       id: '#12346',
       date: '2024-01-20',
-      status: 'في الطريق',
+      status: 'In Transit',
       total: 159.99,
       trackingNumber: 'TRK123456789',
-      items: ['كيبورد ميكانيكي', 'وسادة ماوس']
+      items: ['Mechanical Keyboard', 'Mouse Pad']
     }
   ]);
 
   const tabs = [
-    { id: 'personal', label: 'المعلومات الشخصية', icon: FiUser },
-    { id: 'payment', label: 'طرق الدفع', icon: FiCreditCard },
-    { id: 'addresses', label: 'العناوين', icon: FiHome },
-    { id: 'orders', label: 'سجل الطلبات', icon: FiFileText },
-    { id: 'current', label: 'الطلبات الحالية', icon: FiTruck }
+    { id: 'personal', label: 'Personal Information', icon: FiUser },
+    { id: 'payment', label: 'Payment Methods', icon: FiCreditCard },
+    { id: 'addresses', label: 'Addresses', icon: FiHome },
+    { id: 'orders', label: 'Order History', icon: FiFileText },
+    { id: 'current', label: 'Current Orders', icon: FiTruck }
   ];
 
   const handleVerifyPhone = () => {
@@ -121,9 +120,9 @@ const UserProfile: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'تم التسليم': return 'text-green-600 bg-green-100';
-      case 'في الطريق': return 'text-blue-600 bg-blue-100';
-      case 'قيد المعالجة': return 'text-yellow-600 bg-yellow-100';
+      case 'Delivered': return 'text-green-600 bg-green-100';
+      case 'In Transit': return 'text-blue-600 bg-blue-100';
+      case 'Processing': return 'text-yellow-600 bg-yellow-100';
       default: return 'text-gray-600 bg-gray-100';
     }
   };
@@ -134,39 +133,39 @@ const UserProfile: React.FC = () => {
         return (
           <div className="space-y-6 animate-fade-in">
             <div className="bg-white rounded-lg p-6 shadow-sm border">
-              <h3 className="text-lg font-semibold mb-4">المعلومات الأساسية</h3>
+              <h3 className="text-lg font-semibold mb-4">Basic Information</h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">الاسم</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                   <input
                     type="text"
                     value={userData.name}
                     onChange={(e) => setUserData(prev => ({ ...prev, name: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">البريد الإلكتروني</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                   <input
                     type="email"
                     value={userData.email}
                     onChange={(e) => setUserData(prev => ({ ...prev, email: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">رقم الهاتف</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
                   <div className="flex gap-3">
                     <input
                       type="tel"
                       value={userData.phone}
                       onChange={(e) => setUserData(prev => ({ ...prev, phone: e.target.value }))}
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                     {userData.phoneVerified ? (
                       <div className="flex items-center gap-2 px-3 py-2 bg-green-100 text-green-700 rounded-lg">
                         <FiCheck className="text-sm" />
-                        <span className="text-sm font-medium">تم التحقق</span>
+                        <span className="text-sm font-medium">Verified</span>
                       </div>
                     ) : (
                       <button
@@ -174,7 +173,7 @@ const UserProfile: React.FC = () => {
                         className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center gap-2"
                       >
                         <FaWhatsapp />
-                        <span>تحقق</span>
+                        <span>Verify</span>
                       </button>
                     )}
                   </div>
@@ -182,21 +181,21 @@ const UserProfile: React.FC = () => {
                   {showVerificationInput && (
                     <div className="mt-3 p-4 bg-green-50 rounded-lg">
                       <p className="text-sm text-green-700 mb-3">
-                        تم إرسال كود التحقق عبر واتساب إلى {userData.phone}
+                        Verification code sent via WhatsApp to {userData.phone}
                       </p>
                       <div className="flex gap-2">
                         <input
                           type="text"
                           value={phoneVerificationCode}
                           onChange={(e) => setPhoneVerificationCode(e.target.value)}
-                          placeholder="أدخل كود التحقق"
+                          placeholder="Enter verification code"
                           className="flex-1 px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500"
                         />
                         <button
                           onClick={handleVerificationSubmit}
                           className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
                         >
-                          تأكيد
+                          Confirm
                         </button>
                       </div>
                     </div>
@@ -211,10 +210,10 @@ const UserProfile: React.FC = () => {
         return (
           <div className="space-y-6 animate-fade-in">
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold">طرق الدفع</h3>
-              <button className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors">
+              <h3 className="text-lg font-semibold">Payment Methods</h3>
+              <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                 <FiPlus />
-                <span>إضافة بطاقة</span>
+                <span>Add Card</span>
               </button>
             </div>
             
@@ -222,10 +221,10 @@ const UserProfile: React.FC = () => {
               {paymentMethods.map((method) => (
                 <div key={method.id} className="bg-white rounded-lg p-4 shadow-sm border flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <FiCreditCard className="text-primary text-xl" />
+                    <FiCreditCard className="text-blue-600 text-xl" />
                     <div>
                       <p className="font-medium">{method.type} •••• {method.last4}</p>
-                      <p className="text-sm text-gray-500">ينتهي في {method.expiryDate}</p>
+                      <p className="text-sm text-gray-500">Expires {method.expiryDate}</p>
                     </div>
                   </div>
                   <div className="flex gap-2">
@@ -246,10 +245,10 @@ const UserProfile: React.FC = () => {
         return (
           <div className="space-y-6 animate-fade-in">
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold">العناوين</h3>
-              <button className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors">
+              <h3 className="text-lg font-semibold">Addresses</h3>
+              <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                 <FiPlus />
-                <span>إضافة عنوان</span>
+                <span>Add Address</span>
               </button>
             </div>
             
@@ -258,13 +257,13 @@ const UserProfile: React.FC = () => {
                 <div key={address.id} className="bg-white rounded-lg p-4 shadow-sm border">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-4">
-                      <FiMapPin className="text-primary text-xl mt-1" />
+                      <FiMapPin className="text-blue-600 text-xl mt-1" />
                       <div>
                         <div className="flex items-center gap-2 mb-1">
                           <p className="font-medium">{address.type}</p>
                           {address.isDefault && (
-                            <span className="px-2 py-1 bg-primary-100 text-primary text-xs rounded-full">
-                              افتراضي
+                            <span className="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded-full">
+                              Default
                             </span>
                           )}
                         </div>
@@ -290,7 +289,7 @@ const UserProfile: React.FC = () => {
       case 'orders':
         return (
           <div className="space-y-6 animate-fade-in">
-            <h3 className="text-lg font-semibold">سجل الطلبات</h3>
+            <h3 className="text-lg font-semibold">Order History</h3>
             
             <div className="space-y-4">
               {orderHistory.map((order) => (
@@ -300,7 +299,7 @@ const UserProfile: React.FC = () => {
                       <p className="font-semibold text-lg">{order.id}</p>
                       <p className="text-sm text-gray-500">{order.date}</p>
                     </div>
-                    <div className="text-left">
+                    <div className="text-right">
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
                         {order.status}
                       </span>
@@ -314,8 +313,8 @@ const UserProfile: React.FC = () => {
                     ))}
                   </div>
                   
-                  <button className="mt-4 text-primary hover:text-primary-600 font-medium">
-                    عرض الفاتورة
+                  <button className="mt-4 text-blue-600 hover:text-blue-700 font-medium">
+                    View Invoice
                   </button>
                 </div>
               ))}
@@ -326,7 +325,7 @@ const UserProfile: React.FC = () => {
       case 'current':
         return (
           <div className="space-y-6 animate-fade-in">
-            <h3 className="text-lg font-semibold">الطلبات الحالية</h3>
+            <h3 className="text-lg font-semibold">Current Orders</h3>
             
             <div className="space-y-4">
               {currentOrders.map((order) => (
@@ -336,7 +335,7 @@ const UserProfile: React.FC = () => {
                       <p className="font-semibold text-lg">{order.id}</p>
                       <p className="text-sm text-gray-500">{order.date}</p>
                     </div>
-                    <div className="text-left">
+                    <div className="text-right">
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
                         {order.status}
                       </span>
@@ -348,7 +347,7 @@ const UserProfile: React.FC = () => {
                     <div className="bg-blue-50 rounded-lg p-4 mb-4">
                       <div className="flex items-center gap-2 mb-2">
                         <FiTruck className="text-blue-600" />
-                        <span className="font-medium text-blue-900">رقم التتبع</span>
+                        <span className="font-medium text-blue-900">Tracking Number</span>
                       </div>
                       <p className="text-blue-700 font-mono">{order.trackingNumber}</p>
                     </div>
@@ -374,8 +373,8 @@ const UserProfile: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">الملف الشخصي</h1>
-          <p className="text-gray-600">إدارة معلوماتك الشخصية وطلباتك</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">User Profile</h1>
+          <p className="text-gray-600">Manage your personal information and orders</p>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-6">
@@ -387,9 +386,9 @@ const UserProfile: React.FC = () => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-right transition-colors ${
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
                       activeTab === tab.id
-                        ? 'bg-primary text-white'
+                        ? 'bg-blue-600 text-white'
                         : 'text-gray-700 hover:bg-gray-100'
                     }`}
                   >
