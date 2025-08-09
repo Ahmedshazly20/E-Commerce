@@ -16,6 +16,8 @@ import CustomerSupport from "./../Pages/Admin/CustomerSupport";
 import Landing from './../Pages/Landing';
 import Aboutus from "./../Pages/Aboutus";
 import UserProfile from './../Pages/Profile';
+import Legal from './../Pages/legal';
+import Support from './../Pages/Support';
 
 const isAuthenticated = CookieService.get("Jwt");
 
@@ -52,6 +54,16 @@ const router = createBrowserRouter([
             <Contact />
           </ProtectedRoute>
         ),
+      },
+       {
+        path: "/Legal",
+        element: (
+            <Legal />
+          ),
+      },
+      {
+        path: "/CustomerSupport",
+        element: (<Support/>)
       },
       {
         path: "/MyProfile",

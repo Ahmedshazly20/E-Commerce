@@ -2,6 +2,7 @@
 import React from 'react';
 import { FiShoppingCart, FiStar, FiArrowRight, FiCheck, FiTruck, FiShield } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
+import { CarouselDisplay } from './../Component/Cursoal';
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -78,6 +79,9 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+       
+       <CarouselDisplay/>
+            
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-blue-500 to-purple-600 text-white py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
