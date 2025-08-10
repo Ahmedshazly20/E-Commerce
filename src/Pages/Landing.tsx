@@ -80,7 +80,7 @@ const Landing = () => {
   return (
     <div className="min-h-screen bg-gray-50">
        
-       <CarouselDisplay/>
+       
             
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-blue-500 to-purple-600 text-white py-20 lg:py-32">

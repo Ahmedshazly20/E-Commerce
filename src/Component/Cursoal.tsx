@@ -9,9 +9,9 @@ import 'swiper/css/navigation';
 
 export const CarouselDisplay = () => {
   const images = [
-    { url: "https://img.freepik.com/free-psd/black-friday-super-sale-facebook-cover-banner-template_120329-5177.jpg?t=st=1754746479~exp=1754750079~hmac=3be327f53fe447f041b353c32617f190747e6f61a1778a00f0b5bd04ef2b3839&w=1480", alt: "Black Friday Sale" },
-    { url: "https://www.freepik.com/free-photo/shopping-concept-close-up-portrait-young-beautiful-attractive-redhair-girl-smiling-looking-camera_33724022.htm#fromView=keyword&page=1&position=0&uuid=e432ddf0-178f-4fc7-b6f7-951af219c1d2&query=E+Commerce+Banner", alt: "E-Commerce Banner" },
-    { url: "https://www.vecteezy.com/vector-art/2294859-flash-sale-web-banner-design-e-commerce-online-shopping-header-or-footer-banner", alt: "Flash Sale" },
+    { url: "https://res.cloudinary.com/dpftryij5/image/upload/v1754833015/photocomposition-horizontal-shopping-banner-with-woman-big-smartphone_23-2151201773_tanr5b.jpg", alt: "Black Friday Sale" },
+    { url: "https://res.cloudinary.com/dpftryij5/image/upload/v1754832857/laptop_x1qs15_232025.jpg", alt: "E-Commerce Banner" },
+    { url: "https://res.cloudinary.com/dpftryij5/image/upload/v1754833015/shopping-online-on-mobile-phone-application-or-website-concept-digital-marketing-promotion-smartphone-as-a-store-3d-illustration-vector_jbxocd.jpg", alt: "Flash Sale" },
   ];
 
   if (images.length === 0) {
@@ -35,7 +35,7 @@ export const CarouselDisplay = () => {
         delay: 4000,
         disableOnInteraction: false,
       }}
-      className="mySwiper w-full h-[90vh] mb-[250px] rounded-lg shadow-lg"
+      className="mySwiper w-full h-[60vh] pt-[10px] mb-[40px] rounded-lg "
     >
       {images.map((image, index) => (
         <SwiperSlide key={index}>

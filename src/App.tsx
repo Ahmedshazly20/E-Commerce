@@ -3,7 +3,7 @@ import {RouterProvider,} from "react-router-dom";
 import router from './Routes/routes';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ToastContainer } from 'react-toastify';
-import './output.css'
+import './tailwind.css'
 import { store } from './store/store';
 import { Provider } from 'react-redux';
 import InternetConnection from './Services/internetconnaction';
