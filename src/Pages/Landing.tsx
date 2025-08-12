@@ -1,11 +1,53 @@
-
 import React from 'react';
 import { FiShoppingCart, FiStar, FiArrowRight, FiCheck, FiTruck, FiShield } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import { CarouselDisplay } from './../Component/Cursoal';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/effect-fade';
 
 const Landing = () => {
   const navigate = useNavigate();
+
+  // Hero carousel slides
+  const heroSlides = [
+    {
+      id: 1,
+      title: "Latest Tech Innovations",
+      subtitle: "Discover cutting-edge electronics with unbeatable prices",
+      image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop",
+      cta: "Shop Electronics",
+      category: "electronics"
+    },
+    {
+      id: 2,
+      title: "Premium Audio Experience", 
+      subtitle: "Immerse yourself in crystal-clear sound quality",
+      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=600&fit=crop",
+      cta: "Shop Audio",
+      category: "audio"
+    },
+    {
+      id: 3,
+      title: "Smart Wearables",
+      subtitle: "Stay connected with the latest smartwatch technology",
+      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&h=600&fit=crop",
+      cta: "Shop Wearables", 
+      category: "wearables"
+    },
+    {
+      id: 4,
+      title: "Gaming Revolution",
+      subtitle: "Level up your gaming experience with pro equipment",
+      image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=800&h=600&fit=crop",
+      cta: "Shop Gaming",
+      category: "gaming"
+    }
+  ];
 
   const featuredProducts = [
     {
@@ -79,37 +121,98 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-       
-       
-            
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-blue-500 to-purple-600 text-white py-20 lg:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="animate-fade-in">
-              <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-                Your Ultimate Electronics Store
-              </h1>
-              <p className="text-xl lg:text-2xl mb-8 opacity-90">
-                Discover the latest technology and gadgets with unbeatable prices and fast shipping.
-              </p>
-              <button
-                onClick={() => navigate('/products')}
-                className="bg-white text-primary px-8 py-4  text-purple-600 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 flex items-center gap-3 text-lg"
-              >
-                Shop Now
-                <FiArrowRight className="text-xl" />
-              </button>
-            </div>
-            <div className="animate-scale-in">
-              <img
-                src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&h=400&fit=crop"
-                alt="Electronics Store"
-                className="rounded-lg shadow-2xl"
-              />
-            </div>
+      {/* Hero Carousel Section */}
+      <section className="relative h-screen">
+        <Swiper
+          modules={[Navigation, Pagination, Autoplay, EffectFade]}
+          spaceBetween={0}
+          slidesPerView={1}
+          navigation={{
+            nextEl: '.swiper-button-next-custom',
+            prevEl: '.swiper-button-prev-custom',
+          }}
+          pagination={{
+            clickable: true,
+            el: '.swiper-pagination-custom',
+            renderBullet: (index, className) => {
+              return `<span class="${className} w-3 h-3 bg-white/50 hover:bg-white transition-all duration-300 cursor-pointer"></span>`;
+            },
+          }}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: false,
+          }}
+          effect="fade"
+          fadeEffect={{
+            crossFade: true
+          }}
+          loop={true}
+          className="h-full"
+        >
+          {heroSlides.map((slide) => (
+            <SwiperSlide key={slide.id}>
+              <div className="relative h-full bg-gradient-to-r from-primary/90 to-primary-700/90">
+                {/* Background Image */}
+                <div 
+                  className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                  style={{
+                    backgroundImage: `url(${slide.image})`,
+                  }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary-700/80"></div>
+                </div>
+                
+                {/* Content */}
+                <div className="relative z-10 h-full flex items-center">
+                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                      <div className="text-white animate-fade-in">
+                        <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+                          {slide.title}
+                        </h1>
+                        <p className="text-xl lg:text-2xl mb-8 opacity-90 leading-relaxed">
+                          {slide.subtitle}
+                        </p>
+                        <button
+                          onClick={() => navigate('/products')}
+                          className="bg-white text-primary px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 flex items-center gap-3 text-lg shadow-lg hover:shadow-xl"
+                        >
+                          {slide.cta}
+                          <FiArrowRight className="text-xl" />
+                        </button>
+                      </div>
+                      <div className="animate-scale-in lg:block hidden">
+                        <div className="relative">
+                          <img
+                            src={slide.image}
+                            alt={slide.title}
+                            className="rounded-lg shadow-2xl w-full h-96 object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+          
+          {/* Custom Navigation Buttons */}
+          <div className="swiper-button-prev-custom absolute left-4 top-1/2 transform -translate-y-1/2 z-20 w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 backdrop-blur-sm">
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
           </div>
-        </div>
+          <div className="swiper-button-next-custom absolute right-4 top-1/2 transform -translate-y-1/2 z-20 w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 backdrop-blur-sm">
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+          
+          {/* Custom Pagination */}
+          <div className="swiper-pagination-custom absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex space-x-3"></div>
+        </Swiper>
       </section>
 
       {/* Features Section */}
