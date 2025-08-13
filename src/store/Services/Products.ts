@@ -74,9 +74,9 @@ export const Apislic = createApi({
                 method: "PUT",
                 headers: {
                   Authorization: `Bearer ${CookieService.get("Jwt")}`,
-                  "Content-Type": "application/json", // ده صح لباقي البيانات
+                  "Content-Type": "application/json", 
                 },
-                body: JSON.stringify({ data: payload }), // Strapi بيحتاج الـ data Object
+                body: JSON.stringify({ data: payload }), 
               });
 
               if (updateRes.error) return { error: updateRes.error };

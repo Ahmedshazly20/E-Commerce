@@ -2,34 +2,36 @@ import React, { useEffect, useState } from 'react';
 import { MdAddShoppingCart } from "react-icons/md";
 import Product from '../interface/interface';
 import axios from 'axios';
-import { useQuery } from '@tanstack/react-query'
 import ProductSkeleton from './ProductSkeleton';
 import { discraptionclise ,titleclise } from '../utils/Functions';
 import { useDispatch } from 'react-redux';
 import { AddToCart } from '../store/Featuers/CartSlice';
 import { Link } from 'react-router-dom';
+import { useGetDashboardProductsQuery } from '../store/Services/Products';
+import ErrComponent from './shared/ErrPgae';
 
 export default function Cardcomponent({ products }: { products?: Product[] }) {
   const [Productlist, setProductlist] = useState<Product[]>(products ?? []);
-  const ApiUrl = import.meta.env.VITE_SERVER_URL;
   const dispatch = useDispatch();
+    const {data, error, isLoading} = useGetDashboardProductsQuery()
 
-  useEffect(() => {
-    if (products) setProductlist(products);
-  }, [products]);
+ 
+ useEffect(() => {
+      if (data?.data) {
+        setProductlist(data.data);
+       
+        
+      }
+    }, [data]);
+   
+   console.log(Productlist);
+  
+  // if( error){
+  //   return (<ErrComponent/>)
+  // }
 
-  const fetchProducts = async () => {
-    const res = await axios.get(`${ApiUrl}/api/products?populate=thumbnail&populate=categories`);
-    setProductlist(res.data.data);
-  };
 
-  const { isPending } = useQuery({
-    queryKey: ['Products'],
-    queryFn: fetchProducts,
-    enabled: !products || products.length === 0,
-  });
-
-  if (isPending && Productlist.length === 0) {
+  if (isLoading && Productlist.length === 0) {
     return <>
       {Array.from({length:20}).map((_,idx)=><ProductSkeleton key={idx}/>)}
     </>;
