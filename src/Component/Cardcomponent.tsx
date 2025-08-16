@@ -10,10 +10,14 @@ import { Link } from 'react-router-dom';
 import { useGetDashboardProductsQuery } from '../store/Services/Products';
 import ErrComponent from './shared/ErrPgae';
 
-export default function Cardcomponent({ products }: { products?: Product[] }) {
-  const [Productlist, setProductlist] = useState<Product[]>(products ?? []);
+export default function Cardcomponent({min,max}) {
+  const [Productlist, setProductlist] = useState<Product[]>([]);
   const dispatch = useDispatch();
-    const {data, error, isLoading} = useGetDashboardProductsQuery()
+
+    const {data, error, isLoading} = useGetDashboardProductsQuery({
+      min: min,
+      max: max
+    })
 
  
  useEffect(() => {
@@ -24,7 +28,7 @@ export default function Cardcomponent({ products }: { products?: Product[] }) {
       }
     }, [data]);
    
-   console.log(Productlist);
+
   
   // if( error){
   //   return (<ErrComponent/>)

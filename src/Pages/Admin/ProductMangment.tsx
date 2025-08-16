@@ -31,7 +31,7 @@ const ProductManagement = () => {
   
   return (
     <div className="p-6 space-y-6">
-              <ProductCreationPopup isOpen={showAddModal} onClose={()=>setShowAddModal(false)} categories={categories} submation={'Create product'} />
+              <ProductCreationPopup isOpen={showAddModal} onClose={()=>setShowAddModal(false)} categories={categories} submission={'Create product'} />
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-900">Product Management</h1>    
         <button

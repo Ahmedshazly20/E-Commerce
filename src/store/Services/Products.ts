@@ -94,54 +94,65 @@ export const Apislic = createApi({
         
 
 
+
 createdashboardproduct: build.mutation({
   async queryFn({ productData, imageFile }, _queryApi, _extraOptions, fetchWithBQ) {
-      try {
-          let finalThumbnailId = null;
+    try {
+      let finalThumbnailId = null;
 
-         
-          if (imageFile) {
-              const formData = new FormData();
-              formData.append("files", imageFile);
-              formData.append("ref", "api::product.product");
-               
-              formData.append("field", "thumbnail"); 
+      // 1. Image Upload
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("files", imageFile);
 
-              const uploadRes = await fetchWithBQ({
-                  url: "/api/upload",
-                  method: "POST",
-                  body: formData,
-              });
+        const uploadHeaders = new Headers();
+        uploadHeaders.set("Authorization", `Bearer ${CookieService.get("Jwt")}`);
 
-              if (uploadRes.error) return { error: uploadRes.error };
-              finalThumbnailId = uploadRes.data?.[0]?.id; 
-          }
+        const uploadRes = await fetchWithBQ({
+          url: "/api/upload",
+          method: "POST",
+          body: formData,
+          headers: uploadHeaders,
+        });
 
-          const payload: any = { ...productData };
-          if (finalThumbnailId) {
-              payload.thumbnail = finalThumbnailId;
-          }
-
-          
-          const createRes = await fetchWithBQ({
-              url: `/api/products`,
-              method: "POST",
-              headers: {
-                  Authorization: `Bearer ${CookieService.get("Jwt")}`,
-                  "Content-Type": "application/json", 
-              },
-              body: JSON.stringify({ data: payload }), 
-          });
-
-          if (createRes.error) return { error: createRes.error };
-          return { data: createRes.data };
-      } catch (err: any) {
-          return { error: { status: 500, data: "Unexpected Error", message: err.message || "An unknown error occurred" } };
+        if (uploadRes.error) {
+            // The upload itself failed, which you said is not the case.
+            // But this check is still good practice.
+            console.error('Image upload failed:', uploadRes.error);
+            return { error: uploadRes.error };
+        }
+        finalThumbnailId = uploadRes.data?.[0]?.id;
       }
+      
+      // 2. Product Creation Payload
+      const productPayload = { ...productData };
+      if (finalThumbnailId) {
+        productPayload.thumbnail = finalThumbnailId;
+      }
+
+      // 3. Send final request to create the product
+      const createRes = await fetchWithBQ({
+        url: `/api/products`,
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${CookieService.get("Jwt")}`,
+        },
+        body: JSON.stringify({ data: productPayload }),
+      });
+
+      if (createRes.error) {
+          console.error('Final product creation failed:', createRes.error);
+          return { error: createRes.error };
+      }
+      return { data: createRes.data };
+
+    } catch (err: any) {
+      return { error: { status: 500, data: "Unexpected Error", message: err.message || "An unknown error occurred" } };
+    }
   },
   invalidatesTags: ['Products'],
 }),
-
       
 
 

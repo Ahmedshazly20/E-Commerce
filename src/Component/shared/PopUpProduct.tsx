@@ -10,7 +10,7 @@ const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
   isOpen,
   onClose,
   categories,
-  submation,
+  submission,
   initialData
 }) => {
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
@@ -22,7 +22,8 @@ const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
       stock: 0,
       price: 0,
       description: '',
-      thumbnail: null
+      thumbnail: null,
+      categories: '' // Add default value for categories
     }
   });
 
@@ -45,9 +46,16 @@ const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
         price: initialData.price,
         description: initialData.description,
         thumbnail: null,
+        categories: '', // Reset categories field
       });
-      if (initialData.thumbnailUrl) {
-        setThumbnailPreview(initialData.thumbnailUrl);
+      // Handle Strapi image structure - use the first image's thumbnail format
+      if (initialData.thumbnail && initialData.thumbnail.length > 0) {
+        const firstImage = initialData.thumbnail[0];
+        if (firstImage.formats?.thumbnail?.url) {
+          setThumbnailPreview(firstImage.formats.thumbnail.url);
+        } else if (firstImage.url) {
+          setThumbnailPreview(firstImage.url);
+        }
       }
     } else {
       reset({
@@ -57,6 +65,7 @@ const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
         price: 0,
         description: '',
         thumbnail: null,
+        categories: '', // Reset categories field
       });
       setThumbnailPreview(null);
     }
@@ -64,9 +73,23 @@ const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
 
   useEffect(() => {
     if (watchedThumbnail?.[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => setThumbnailPreview(e.target?.result as string);
-      reader.readAsDataURL(watchedThumbnail[0]);
+      const file = watchedThumbnail[0];
+      console.log('Thumbnail changed:', {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        isFile: file instanceof File
+      });
+      
+      if (file instanceof File && file.size > 0) {
+        const reader = new FileReader();
+        reader.onload = (e) => setThumbnailPreview(e.target?.result as string);
+        reader.readAsDataURL(file);
+      } else {
+        setThumbnailPreview(null);
+      }
+    } else {
+      setThumbnailPreview(null);
     }
   }, [watchedThumbnail]);
 
@@ -84,22 +107,95 @@ const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
   const handleClose = () => {
     reset();
     setThumbnailPreview(null);
-    onClose();
+    // Explicitly reset the file input
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+    if (onClose) {
+      onClose();
+    }
   };
 
   const onFormSubmit = async (data: ProductFormData) => {
+    // Debug: Log the raw form data
+    console.log('Raw form data:', data);
+    
+    // Validate required fields
+    if (!data.title || !data.description || !data.categories) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+    
+    // Validate numeric fields
+    const price = Number(data.price);
+    const stock = Number(data.stock);
+    
+    if (isNaN(price) || price <= 0) {
+      toast.error('Please enter a valid price');
+      return;
+    }
+    
+    if (isNaN(stock) || stock < 0) {
+      toast.error('Please enter a valid stock quantity');
+      return;
+    }
+    
     const commonProductData = {
       title: data.title,
-      price: data.price,
-      stock: data.stock,
+      price: price,
+      stock: stock,
       description: data.description,
+      categories: data.categories,
     };
 
-    const imageFile = data.thumbnail?.[0] || null;
+    // Handle thumbnail file properly - check if it's a valid File object
+    let imageFile = null;
+    if (data.thumbnail && data.thumbnail.length > 0) {
+      const file = data.thumbnail[0];
+      console.log('Thumbnail file details:', {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        isFile: file instanceof File,
+        constructor: file.constructor.name
+      });
+      
+      // Only proceed if it's a valid file
+      if (file instanceof File && file.size > 0) {
+        imageFile = file;
+        console.log('Valid file detected, proceeding with upload');
+      } else {
+        console.warn('Invalid thumbnail file detected, proceeding without image');
+        // Clear the invalid file input
+        setValue('thumbnail', null);
+      }
+    }
 
-    try {
-      if (isEditMode) {
-        const removeThumbnailFlag = !imageFile && initialData.thumbnailUrl && !thumbnailPreview;
+        try {
+      // Debug: Log what we're sending
+      console.log('Submitting product data:', {
+        commonProductData,
+        imageFile: imageFile ? {
+          name: imageFile.name,
+          size: imageFile.size,
+          type: imageFile.type
+        } : 'No file',
+        isEditMode,
+        categoriesValue: data.categories,
+        dataTypes: {
+          title: typeof commonProductData.title,
+          price: typeof commonProductData.price,
+          stock: typeof commonProductData.stock,
+          description: typeof commonProductData.description,
+          categories: typeof commonProductData.categories
+        }
+      });
+
+      if (isEditMode && initialData) {
+        // Check if we should remove the thumbnail
+        const hasExistingThumbnail = initialData.thumbnail && initialData.thumbnail.length > 0;
+        const removeThumbnailFlag = !imageFile && hasExistingThumbnail && !thumbnailPreview;
 
         await updateProduct({
           documentId: initialData.documentId,
@@ -114,8 +210,19 @@ const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
           imageFile: imageFile,
         }).unwrap();
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      console.log('API Error:', error);
+      
+      // Log more detailed error information
+      if (error.data) {
+        console.log('Error data:', error.data);
+      }
+      if (error.status) {
+        console.log('Error status:', error.status);
+      }
+      if (error.message) {
+        console.log('Error message:', error.message);
+      }
       
       // Errors are handled by the useEffect hook above
     }
@@ -188,30 +295,30 @@ const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
             {errors.description && <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>}
           </div>    
                
-                {/* Categories */}
-                    {/* <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Categories *</label>
-                    <div className="border rounded-md p-3 max-h-32 overflow-y-auto">
-                      {categories.length === 0 ? (
-                        <p className="text-gray-500 text-sm">No categories available</p>
-                      ) : (
-                        <div className="space-y-2">
-                          {categories.map((category) => (
-                            <label key={category.id} className="flex items-center space-x-2">
-                              <input
-                                type="checkbox"
-                                value={category.id}
-                                {...register('categories', { required: 'At least one category is required' })}
-                                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                              />
-                              <span className="text-sm text-gray-700">{category.name}</span>
-                            </label>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                    {errors.categories && <p className="mt-1 text-sm text-red-600">{errors.categories.message}</p>}
-                    </div> */}
+          {/* Categories */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Categories *</label>
+            <div className="border rounded-md p-3 max-h-32 overflow-y-auto">
+              {categories.length === 0 ? (
+                <p className="text-gray-500 text-sm">No categories available</p>
+              ) : (
+                <div className="space-y-2">
+                  {categories.map((category) => (
+                    <label key={category.id} className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        value={category.documentId}
+                        {...register('categories', { required: 'At least one category is required' })}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700">{category.title}</span>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+            {errors.categories && <p className="mt-1 text-sm text-red-600">{errors.categories.message}</p>}
+          </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Thumbnail</label>
@@ -222,7 +329,18 @@ const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
                 <input
                   type="file"
                   accept="image/*"
-                  {...register('thumbnail')}
+                  {...register('thumbnail', {
+                    onChange: (e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        console.log('File selected:', {
+                          name: file.name,
+                          size: file.size,
+                          type: file.type
+                        });
+                      }
+                    }
+                  })}
                   className="hidden"
                 />
               </label>
@@ -257,7 +375,7 @@ const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
               disabled={currentLoading}
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {submation}
+              {submission}
             </button>
           </div>
         </div>
@@ -267,4 +385,3 @@ const ProductCreationPopup: React.FC<ProductCreationPopupProps> = ({
 };
 
 export default ProductCreationPopup;
-

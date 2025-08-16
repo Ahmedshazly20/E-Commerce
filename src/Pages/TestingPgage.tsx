@@ -1,14 +1,17 @@
 // Demo
+import React, { useState } from 'react';
 import ProductCreationPopup from './../Component/shared/PopUpProduct';
+import { ProductFormData } from '../interface/productsInterfaces';
+
 const Demo: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const categories = [
-    { id: '1', name: 'Electronics' },
-    { id: '2', name: 'Clothing' },
-    { id: '3', name: 'Books' },
-    { id: '4', name: 'Home & Garden' }
+    { id: 1, documentId: '1', title: 'Electronics', createdAt: '', updatedAt: '', publishedAt: '' },
+    { id: 2, documentId: '2', title: 'Clothing', createdAt: '', updatedAt: '', publishedAt: '' },
+    { id: 3, documentId: '3', title: 'Books', createdAt: '', updatedAt: '', publishedAt: '' },
+    { id: 4, documentId: '4', title: 'Home & Garden', createdAt: '', updatedAt: '', publishedAt: '' }
   ];
 
   const handleSubmit = async (data: ProductFormData) => {
@@ -37,6 +40,7 @@ const Demo: React.FC = () => {
         onClose={() => setIsOpen(false)}
         onSubmit={handleSubmit}
         categories={categories}
+        submission="Create Product"
         isLoading={loading}
       />
     </div>
