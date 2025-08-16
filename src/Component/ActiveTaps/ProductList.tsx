@@ -117,7 +117,7 @@ function ProductList() {
        </div>
 
           {/* Search and Filters */}
-          <div className="bg-white rounded-lg shadow-sm border p-6">
+          <div className="bg-white rounded-lg shadow-sm border-[#00000024] p-6">
             <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
               <div className="relative flex-1">
                 <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -149,7 +149,7 @@ function ProductList() {
           </div>
 
           {/* Products Table */}
-          <div className="bg-white rounded-lg shadow-sm border">
+          <div className="bg-white rounded-lg shadow-sm border-[#00000024]">
             <div className="overflow-x-auto">
               <table className="min-w-full border-red border-opacity-50">
                 <thead className="bg-gray-50">

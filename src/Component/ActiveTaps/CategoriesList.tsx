@@ -63,12 +63,12 @@ function Categories() {
     <div className="space-y-6">
       <PopUpCategoraise isOpen={AddModal} onClose={()=>setAddModal(false)}  submission={submation} initialData={CategoriesToEdit} />
     {/* Categories Table */}
-    <div className="bg-white rounded-lg shadow-sm border">
+    <div className="bg-white rounded-lg shadow-sm border-[#00000024]">
       <div className="overflow-x-auto">
         <div className='p-1 flex items-end justify-end m-3 '>
                  <button
                     onClick={handleAddProduct}
-                    className="flex items-center space-x-2 bg-primary border-2 border-solid px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors">
+                    className="flex items-center space-x-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors">
                     <FaPlus className="w-4 h-4" />
                     <span>Add Categories</span>
                   </button>

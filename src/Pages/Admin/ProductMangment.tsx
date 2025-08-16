@@ -34,12 +34,7 @@ const ProductManagement = () => {
               <ProductCreationPopup isOpen={showAddModal} onClose={()=>setShowAddModal(false)} categories={categories} submission={'Create product'} />
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-900">Product Management</h1>    
-        <button
-          onClick={handleAddProduct}
-          className="flex items-center space-x-2 bg-primary border-2 border-solid px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors">
-          <FaPlus className="w-4 h-4" />
-          <span>Add Product</span>
-        </button>
+        
       </div>
       {/* Tabs */}
       <div className="border-b border-gray-200">
